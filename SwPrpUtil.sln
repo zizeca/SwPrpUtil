@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31313.79
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwPrpUtil", "SwPrpUtil.csproj", "{63AE48EA-D5CF-4921-8E8A-C572D1124AEB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{C9589037-585B-46AB-83BD-870CDA64C69A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{63AE48EA-D5CF-4921-8E8A-C572D1124AEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63AE48EA-D5CF-4921-8E8A-C572D1124AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63AE48EA-D5CF-4921-8E8A-C572D1124AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63AE48EA-D5CF-4921-8E8A-C572D1124AEB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E0C42CA8-EC27-41DD-87BE-CFF28A3A60D5}
+	EndGlobalSection
+EndGlobal
