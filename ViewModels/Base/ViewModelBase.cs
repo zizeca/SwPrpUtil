@@ -8,9 +8,22 @@ using System.Threading.Tasks;
 
 namespace SwPrpUtil.ViewModels.Base
 {
-	internal abstract class ViewModelBase : INotifyPropertyChanged
+	internal abstract class ViewModelBase : INotifyPropertyChanged , IDisposable
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
+
+		public void Dispose()
+		{
+			throw new NotImplementedException();
+		}
+
+		private bool _Disposed;
+
+		protected virtual void Dispose(bool Disposing)
+		{
+			if (!Disposing || _Disposed) return;
+			_Disposed = true;
+		}
 
 
 		protected virtual void OnPropertyChanged([CallerMemberName] string PropertyName = null)
