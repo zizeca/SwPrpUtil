@@ -7,7 +7,19 @@ using System.Threading.Tasks;
 
 namespace SwPrpUtil.ViewModels
 {
-	class MainWindowViewModel : ViewModelBase
+	internal class MainWindowViewModel : ViewModelBase
 	{
+		#region Title
+
+		private string _Title = "Property Utils";
+
+		public string  Title
+		{
+			get => _Title;
+			set => Set(ref _Title, value);
+		}
+
+		#endregion
+
 	}
 }

@@ -14,7 +14,7 @@ namespace SwPrpUtil.ViewModels.Base
 
 		public void Dispose()
 		{
-			throw new NotImplementedException();
+			Dispose(true);
 		}
 
 		private bool _Disposed;
