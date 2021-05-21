@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.31313.79
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwPrpUtil", "SwPrpUtil.csproj", "{63AE48EA-D5CF-4921-8E8A-C572D1124AEB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{C9589037-585B-46AB-83BD-870CDA64C69A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C9589037-585B-46AB-83BD-870CDA64C69A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwPrpUtilConsole", "Tests\SwPrpUtilConsole\SwPrpUtilConsole.csproj", "{61D9856E-651C-4294-BB1C-3F41F77057D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwPrpUtilWpfTest", "Tests\SwPrpUtilWpfTest\SwPrpUtilWpfTest.csproj", "{F6B665AA-58B0-4213-8951-0CA11B311735}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,9 +21,21 @@ Global
 		{63AE48EA-D5CF-4921-8E8A-C572D1124AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63AE48EA-D5CF-4921-8E8A-C572D1124AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63AE48EA-D5CF-4921-8E8A-C572D1124AEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61D9856E-651C-4294-BB1C-3F41F77057D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61D9856E-651C-4294-BB1C-3F41F77057D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61D9856E-651C-4294-BB1C-3F41F77057D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61D9856E-651C-4294-BB1C-3F41F77057D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6B665AA-58B0-4213-8951-0CA11B311735}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6B665AA-58B0-4213-8951-0CA11B311735}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6B665AA-58B0-4213-8951-0CA11B311735}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6B665AA-58B0-4213-8951-0CA11B311735}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{61D9856E-651C-4294-BB1C-3F41F77057D0} = {C9589037-585B-46AB-83BD-870CDA64C69A}
+		{F6B665AA-58B0-4213-8951-0CA11B311735} = {C9589037-585B-46AB-83BD-870CDA64C69A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E0C42CA8-EC27-41DD-87BE-CFF28A3A60D5}
