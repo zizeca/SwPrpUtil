@@ -79,7 +79,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\SwFileConfiguration.cs" />
+    <Compile Include="Model\SwFileItem.cs" />
     <Compile Include="Model\SwHolder.cs" />
+    <Compile Include="Model\SwProperty.cs" />
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\Windows\MainWindow.xaml.cs">
