@@ -59,9 +59,20 @@
 						<RowDefinition Height="30"/>
 						<RowDefinition Height="*"/>
 					</Grid.RowDefinitions>
-					<DataGrid Grid.Column="0" Grid.Row="1"/>
+					<DataGrid Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False" >
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="Poperty Name"/>
+							<DataGridComboBoxColumn Header="Type"/>
+							<DataGridTextColumn Header="Value / Text expression"/>
+						</DataGrid.Columns>
+					</DataGrid>
 					<GridSplitter Grid.Column="1" Grid.RowSpan="2" Width="5" HorizontalAlignment="Stretch" />
-					<DataGrid Grid.Column="3" Grid.Row="1"/>
+					<DataGrid Grid.Column="3" Grid.Row="1">
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="File Name" MinWidth="100" />
+							<DataGridTextColumn Header="Status"/>
+						</DataGrid.Columns>
+					</DataGrid>
 				</Grid>
 			</TabItem>
 			<TabItem Header="Prop deleter" ></TabItem>
