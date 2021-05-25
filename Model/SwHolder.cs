@@ -9,7 +9,7 @@ using SolidWorks.Interop.sldworks;
 
 namespace SwPrpUtil.Model
 {
-	internal class SwHolder
+	public class SwHolder
 	{
 		private SwHolder() { }
 
@@ -19,7 +19,7 @@ namespace SwPrpUtil.Model
 		private static bool ProcessChecked = false;
 
 
-		internal async static Task<SldWorks> GetSwAppAsync()
+		public async static Task<SldWorks> GetSwAppAsync()
 		{
 			if (!ProcessChecked)
 			{
@@ -54,7 +54,7 @@ namespace SwPrpUtil.Model
 			return swApp;
 		}
 
-		internal static void Dispose()
+		public static void Dispose()
 		{
 			if (swApp != null && !SwWasStarted)
 			{
