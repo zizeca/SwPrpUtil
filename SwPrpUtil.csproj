@@ -57,6 +57,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -83,7 +84,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Infrastructure\Commands\AsyncCommand.cs" />
+    <Compile Include="Infrastructure\Commands\Base\IAsyncCommand.cs" />
     <Compile Include="Infrastructure\Commands\Base\CommandBase.cs" />
+    <Compile Include="Infrastructure\Commands\Base\IErrorHandler.cs" />
+    <Compile Include="Infrastructure\Commands\Base\TaskUtilities.cs" />
     <Compile Include="Infrastructure\Commands\LambdaCommand.cs" />
     <Compile Include="Model\SwFileConfiguration.cs" />
     <Compile Include="Model\SwFileItem.cs" />

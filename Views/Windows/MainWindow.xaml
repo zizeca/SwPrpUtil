@@ -13,11 +13,11 @@
 	</Window.DataContext>
 
 	<DockPanel>
-		<Menu DockPanel.Dock="Top" Height="22">
-			<MenuItem Header="Фаил">
+		<Menu DockPanel.Dock="Top" >
+			<MenuItem Header="Фаил" Height="30">
 				<MenuItem Header="Выход"/>
 			</MenuItem>
-			<MenuItem Header="Помощь">
+			<MenuItem Header="Помощь" Height="30">
 				<MenuItem Header="О программе"/>
 			</MenuItem>
 		</Menu>
