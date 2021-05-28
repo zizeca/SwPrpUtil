@@ -15,37 +15,41 @@ namespace SwPrpUtil.Model
 
 		private static SldWorks swApp;
 
-		private static bool SwWasStarted = false;
-		private static bool ProcessChecked = false;
+		private static bool _firsRun = true;
+		private static bool _closeSwappAfterCloseWindow = true;
+		private static bool _sldVisible = false;
+
 
 
 		public async static Task<SldWorks> GetSwAppAsync()
 		{
-			if (!ProcessChecked)
-			{
-				Process[] pname = Process.GetProcessesByName("SldWorks");
-				if (pname.Length != 0)
-				{
-					SwWasStarted = true;
-					Console.WriteLine("SldWorks is running");
-				}
 
-				ProcessChecked = true;
+
+			Process[] pname = Process.GetProcessesByName("SldWorks");
+			if (pname.Length != 0)
+			{
+				if(_firsRun && swApp != null)
+				{
+					_firsRun = false;
+					_sldVisible = swApp.Visible;
+					_closeSwappAfterCloseWindow = false;
+				}
+				Debug.WriteLine("SldWorks is running");
 			}
 
 
-			if (swApp == null)
-			{
+			Debug.WriteLine("Num process = {0}", pname.Length);
 
-				//*
+			if(swApp != null && pname.Length != 0)
+			{
+				swApp.Visible = true;
+			}
+
+			if (swApp == null || pname.Length == 0)
+			{
 				return await Task<SldWorks>.Run(() => {
 					swApp = Activator.CreateInstance(Type.GetTypeFromProgID("SldWorks.Application")) as SldWorks;
-
-					if (SwWasStarted)
-						swApp.Visible = true;
-					else
-						swApp.Visible = false;
-
+					swApp.Visible = false;
 					return swApp;
 				});
 
@@ -60,7 +64,8 @@ namespace SwPrpUtil.Model
 
 		public static void Dispose()
 		{
-			if (swApp != null && !SwWasStarted)
+			
+			if (swApp != null && _closeSwappAfterCloseWindow )
 			{
 				swApp.CloseAllDocuments(true);
 				swApp.ExitApp();
@@ -78,9 +83,14 @@ namespace SwPrpUtil.Model
 				{
 					MessageBox.Show(ex.Message);
 				}
-
-
+			} 
+			else if( swApp != null)
+			{
+				swApp.Visible = true;
 			}
+
+
+
 		}
 	}
 }
