@@ -24,7 +24,7 @@ namespace SwPrpUtil.Infrastructure.Commands.Base
 
 		public event EventHandler CanExecuteChanged;
 
-		public AsyncCommandBase(Action<Exception> onExeption)
+		public AsyncCommandBase(Action<Exception> onExeption = null)
 		{
 			_onExeption = onExeption;
 		}

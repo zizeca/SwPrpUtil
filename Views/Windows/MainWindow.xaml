@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:cmd="clr-namespace:SwPrpUtil.Infrastructure.Commands"
 		xmlns:vm="clr-namespace:SwPrpUtil.ViewModels"
         xmlns:l="clr-namespace:SwPrpUtil"
         mc:Ignorable="d"
@@ -68,7 +69,11 @@
 							<RowDefinition Height="30"/>
 							<RowDefinition Height="*"/>
 						</Grid.RowDefinitions>
-						<Button Content="Start"/>
+						<Button Content="Start">
+							<Button.Command>
+								<cmd:SldWorksRunTestCommand/>
+							</Button.Command>
+						</Button>
 					</Grid>
 					<DataGrid Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False" >
 						<DataGrid.Columns>

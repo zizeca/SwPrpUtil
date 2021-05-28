@@ -50,6 +50,10 @@ namespace SwPrpUtil.Model
 				});
 
 			}
+			else
+			{
+				Debug.WriteLine("Sld works is not null");
+			}
 
 			return swApp;
 		}

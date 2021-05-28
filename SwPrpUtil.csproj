@@ -92,6 +92,7 @@
     <Compile Include="Infrastructure\Commands\Deprecated\IErrorHandler.cs" />
     <Compile Include="Infrastructure\Commands\Deprecated\TaskUtilities.cs" />
     <Compile Include="Infrastructure\Commands\LambdaCommand.cs" />
+    <Compile Include="Infrastructure\Commands\SldWorksRunTestCommand.cs" />
     <Compile Include="Model\SwFileConfiguration.cs" />
     <Compile Include="Model\SwFileItem.cs" />
     <Compile Include="Model\SwHolder.cs" />
