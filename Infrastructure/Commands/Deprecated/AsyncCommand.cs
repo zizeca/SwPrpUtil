@@ -1,4 +1,4 @@
-﻿using SwPrpUtil.Infrastructure.Commands.Base;
+﻿using SwPrpUtil.Infrastructure.Commands.Deprecated;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace SwPrpUtil.Infrastructure.Commands
+namespace SwPrpUtil.Infrastructure.Commands.Deprecated
 {
     public class AsyncCommand : IAsyncCommand
     {

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace SwPrpUtil.Infrastructure.Commands.Base
+namespace SwPrpUtil.Infrastructure.Commands.Deprecated
 {
 	public interface IAsyncCommand : ICommand
 	{

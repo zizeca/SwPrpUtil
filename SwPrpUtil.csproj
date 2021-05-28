@@ -84,11 +84,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Infrastructure\Commands\AsyncCommand.cs" />
-    <Compile Include="Infrastructure\Commands\Base\IAsyncCommand.cs" />
+    <Compile Include="Infrastructure\Commands\Deprecated\AsyncCommand.cs" />
+    <Compile Include="Infrastructure\Commands\AsyncRelayCommand.cs" />
+    <Compile Include="Infrastructure\Commands\Base\AsyncCommandBase.cs" />
+    <Compile Include="Infrastructure\Commands\Deprecated\IAsyncCommand.cs" />
     <Compile Include="Infrastructure\Commands\Base\CommandBase.cs" />
-    <Compile Include="Infrastructure\Commands\Base\IErrorHandler.cs" />
-    <Compile Include="Infrastructure\Commands\Base\TaskUtilities.cs" />
+    <Compile Include="Infrastructure\Commands\Deprecated\IErrorHandler.cs" />
+    <Compile Include="Infrastructure\Commands\Deprecated\TaskUtilities.cs" />
     <Compile Include="Infrastructure\Commands\LambdaCommand.cs" />
     <Compile Include="Model\SwFileConfiguration.cs" />
     <Compile Include="Model\SwFileItem.cs" />
