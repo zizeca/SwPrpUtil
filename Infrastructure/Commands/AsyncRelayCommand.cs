@@ -9,17 +9,35 @@ namespace SwPrpUtil.Infrastructure.Commands
 {
 	public class AsyncRelayCommand : AsyncCommandBase
 	{
-		private readonly Func<Task> _callBack;
 
+		private readonly Func<Task> _callBackAsync;
+		private readonly Func<bool> _canExecute;
+		private readonly Action<Exception> _exception;
 
-		public AsyncRelayCommand(Func<Task> callBack, Action<Exception> onExeption ) : base(onExeption)
+		public AsyncRelayCommand(Func<Task> callBackAsync, Func<bool> canExecute = null, Action<Exception> extension = null)
 		{
-			_callBack = callBack;
+			_callBackAsync = callBackAsync ?? throw new ArgumentNullException(nameof(callBackAsync));
+			_callBackAsync = callBackAsync;
+			_canExecute = canExecute;
+			_exception = extension;
 		}
 
-		public override async Task ExecuteAsunc(object parameter)
+		public override bool CanExecute()
 		{
-			await _callBack();
+			return _canExecute?.Invoke() ?? true;
+		}
+
+		public override void HandleException(Exception ex)
+		{
+			if(_exception != null)
+				_exception.Invoke(ex);
+			else
+				base.HandleException(ex);
+		}
+
+		public override async Task ExecuteAsync()
+		{
+			await _callBackAsync.Invoke();
 		}
 	}
 }

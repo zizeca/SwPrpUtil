@@ -8,7 +8,8 @@ using System.Windows.Input;
 
 namespace SwPrpUtil.Infrastructure.Commands.Deprecated
 {
-    public class AsyncCommand : IAsyncCommand
+
+/*    public class AsyncCommand : IAsyncCommand
     {
         public event EventHandler CanExecuteChanged;
 
@@ -124,5 +125,5 @@ namespace SwPrpUtil.Infrastructure.Commands.Deprecated
         }
         #endregion
     }
-
+*/
 }

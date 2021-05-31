@@ -84,6 +84,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Infrastructure\Commands\Base\IAsyncCommand.cs" />
     <Compile Include="Infrastructure\Commands\Deprecated\AsyncCommand.cs" />
     <Compile Include="Infrastructure\Commands\AsyncRelayCommand.cs" />
     <Compile Include="Infrastructure\Commands\Base\AsyncCommandBase.cs" />

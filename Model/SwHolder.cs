@@ -23,18 +23,28 @@ namespace SwPrpUtil.Model
 
 		public async static Task<SldWorks> GetSwAppAsync()
 		{
-
+			//throw new InvalidOperationException("Test exception");
 
 			Process[] pname = Process.GetProcessesByName("SldWorks");
 			if (pname.Length != 0)
 			{
-				if(_firsRun && swApp != null)
+				if(_firsRun)
 				{
 					_firsRun = false;
-					_sldVisible = swApp.Visible;
+					_sldVisible = swApp?.Visible ?? true;
 					_closeSwappAfterCloseWindow = false;
 				}
+
+				if(swApp != (pname[0] as SldWorks))
+				{
+					swApp = null;
+				}
+
 				Debug.WriteLine("SldWorks is running");
+			}
+			else
+			{
+				swApp = null; //check if procees terminated but swApp not null
 			}
 
 
