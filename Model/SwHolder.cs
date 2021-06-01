@@ -27,7 +27,7 @@ namespace SwPrpUtil.Model
 		private static SldWorks swApp;
 
 		private static bool _firsRun = true;
-		private static bool _closeSwappAfterCloseWindow = true;
+		private static bool _shallExitApp = true;
 		private static bool _sldVisible = false;
 
 		public async Task<SldWorks> GetSwAppAsync()
@@ -41,7 +41,7 @@ namespace SwPrpUtil.Model
 				{
 					_firsRun = false;
 					_sldVisible = swApp?.Visible ?? true;
-					_closeSwappAfterCloseWindow = false;
+					_shallExitApp = false;
 				}
 
 				if (swApp != (pname[0] as SldWorks))
@@ -91,7 +91,7 @@ namespace SwPrpUtil.Model
 
 		public void Dispose()
 		{
-			if (swApp != null && _closeSwappAfterCloseWindow)
+			if (swApp != null && _shallExitApp)
 			{
 				swApp.CloseAllDocuments(true);
 				swApp.ExitApp();
