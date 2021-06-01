@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SwPrpUtil.Infrastructure.Commands
 {
-	class SldWorksRunTestCommand : AsyncCommandBase
+	class SwRunСommand : AsyncCommandBase
 	{
 
 		public override bool CanExecute()
@@ -19,9 +19,17 @@ namespace SwPrpUtil.Infrastructure.Commands
 
 		public override async Task ExecuteAsync()
 		{
-			await SwHolder.Instance.GetSwAppAsync();
+			await SwHolder.GetSwAppAsync();
 		}
-
-
 	}
+
+	class SwCloseCommand : CommandBase
+	{
+
+		public override void Execute(object parameter)
+		{
+			SwHolder.Dispose();
+		}
+	}
+
 }

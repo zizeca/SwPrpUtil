@@ -92,12 +92,13 @@
     <Compile Include="Infrastructure\Commands\Base\CommandBase.cs" />
     <Compile Include="Infrastructure\Commands\Deprecated\IErrorHandler.cs" />
     <Compile Include="Infrastructure\Commands\Deprecated\TaskUtilities.cs" />
-    <Compile Include="Infrastructure\Commands\LambdaCommand.cs" />
+    <Compile Include="Infrastructure\Commands\RelayCommand.cs" />
     <Compile Include="Infrastructure\Commands\SldWorksRunTestCommand.cs" />
     <Compile Include="Model\SwFileConfiguration.cs" />
     <Compile Include="Model\SwFileItem.cs" />
     <Compile Include="Model\SwHolder.cs" />
     <Compile Include="Model\SwProperty.cs" />
+    <Compile Include="Model\SwPrpEditor.cs" />
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\Windows\MainWindow.xaml.cs">

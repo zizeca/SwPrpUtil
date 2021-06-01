@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace SwPrpUtil.Infrastructure.Commands
 {
-	class LambdaCommand : CommandBase
+	class RelayCommand : CommandBase
 	{
 		private readonly Action<object> execute;
 		private readonly Func<object, bool> canExecute;
 
-		public LambdaCommand(Action<object> Execute, Func<object, bool> CanExecute = null)
+		public RelayCommand(Action<object> Execute, Func<object, bool> CanExecute = null)
 		{
 			execute = Execute ?? throw new ArgumentNullException(nameof(Execute));
 			canExecute = CanExecute;
