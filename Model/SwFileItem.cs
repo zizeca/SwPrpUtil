@@ -12,20 +12,10 @@ namespace SwPrpUtil.Model
 		#region Path_properies
 
 		private string _filePath;
-		private string _extension;
-		private string _filename;
 
-		public string Extension
-		{
-			get => _extension;
-			private set => _extension = value;
-		}
+		public string Extension { get; private set; }
 
-		public string FileName
-		{
-			get => _filename;
-			private set => _filename = value;
-		}
+		public string FileName { get; private set; }
 
 		public string FilePath
 		{
