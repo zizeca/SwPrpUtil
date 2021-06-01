@@ -18,8 +18,6 @@ namespace SwPrpUtil.Model
 			//Read files from folder
 			//Invoke AddFile for each files
 
-
-
 			throw new NotImplementedException();
 		}
 
@@ -32,6 +30,17 @@ namespace SwPrpUtil.Model
 
 		public bool ImportPropertiesFromFile(string pathToFile, string configName = null)
 		{
+			//Open file in solidworks
+			//Read properties from main properti or from configName property
+			//create _swSourceProperties
+
+			throw new NotImplementedException();
+		}
+
+		public void RunProcess()
+		{
+			// write properties from _swSourceProperties to each SwFileItem in _swFileItems
+
 			throw new NotImplementedException();
 		}
 
