@@ -14,14 +14,10 @@ namespace SwPrpUtil.Model
 		YES_OR_NO
 	}
 
-	internal class SwProperty
+	public struct SwProperty
 	{
-		private string _propertyName;
-		private PrpType _typePrp;
-		private string _expression;
-
-		public string PropertyName { get => _propertyName; set => _propertyName = value; }
-		public PrpType TypePrp { get => _typePrp; set => _typePrp = value; }
-		public string Expression { get => _expression; set => _expression = value; }
+		string PropertyName;
+		PrpType TypePrp;
+		string Expression;
 	}
 }
