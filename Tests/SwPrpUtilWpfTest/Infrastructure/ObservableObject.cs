@@ -6,25 +6,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SwPrpUtil.ViewModels.Base
+namespace SwPrpUtilWpfTest.Infrastructure
 {
-	internal abstract class ViewModelBase : INotifyPropertyChanged , IDisposable
+	internal abstract class ObservableObject : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
-
-		public void Dispose()
-		{
-			Dispose(true);
-		}
-
-		private bool _Disposed;
-
-		protected virtual void Dispose(bool Disposing)
-		{
-			if (!Disposing || _Disposed) return;
-			_Disposed = true;
-		}
-
 
 		protected virtual void OnPropertyChanged([CallerMemberName] string PropertyName = null)
 		{
@@ -38,7 +24,6 @@ namespace SwPrpUtil.ViewModels.Base
 			OnPropertyChanged(PropertyName);
 			return true;
 		}
-
 
 	}
 }

@@ -1,13 +1,14 @@
-﻿using SwPrpUtil.ViewModels.Base;
+﻿using SwPrpUtilWpfTest.Infrastructure;
+using SwPrpUtilWpfTest.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SwPrpUtil.ViewModels
+namespace SwPrpUtilWpfTest.ViewModels
 {
-	internal class MainWindowViewModel : ViewModelBase
+	internal class MainWindowViewModel : ObservableObject
 	{
 		#region Title
 
@@ -20,6 +21,10 @@ namespace SwPrpUtil.ViewModels
 		}
 
 		#endregion
+
+		private TestModel _testModel;
+
+
 
 	}
 }
