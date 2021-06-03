@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.ServiceModel.Configuration;
 
-namespace SwPrpUtil.Model
+namespace SwPrpUtil.Models
 {
 	internal class SwPrpEditor
 	{

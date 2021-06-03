@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SwPrpUtil.Model
+namespace SwPrpUtil.Models
 {
 	internal class SwFileConfiguration
 	{

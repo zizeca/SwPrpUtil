@@ -1,5 +1,5 @@
 ﻿using SwPrpUtil.Infrastructure.Commands.Base;
-using SwPrpUtil.Model;
+using SwPrpUtil.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

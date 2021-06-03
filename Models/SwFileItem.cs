@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace SwPrpUtil.Model
+namespace SwPrpUtil.Models
 {
 	internal class SwFileItem
 	{

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace SwPrpUtil.Model
+namespace SwPrpUtil.Models
 {
 	public class SwHolder : IDisposable
 	{
@@ -24,7 +24,7 @@ namespace SwPrpUtil.Model
 		{
 		}
 
-		private static SldWorks swApp;
+		private SldWorks swApp;
 
 		private static bool _firsRun = true;
 		private static bool _shallExitApp = true;
