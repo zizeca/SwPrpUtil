@@ -1,10 +1,13 @@
 ﻿using SwPrpUtilWpfTest.Infrastructure;
+using SwPrpUtilWpfTest.Infrastructure.Commands;
 using SwPrpUtilWpfTest.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 
 namespace SwPrpUtilWpfTest.ViewModels
 {
@@ -14,6 +17,11 @@ namespace SwPrpUtilWpfTest.ViewModels
 
 		private string _Title = "Property Utils";
 
+		public MainWindowViewModel()
+		{
+			ShowCommand = new RelayCommand( ShowMethod );
+		}
+
 		public string  Title
 		{
 			get => _Title;
@@ -22,8 +30,23 @@ namespace SwPrpUtilWpfTest.ViewModels
 
 		#endregion
 
-		private TestModel _testModel;
+		private bool _IsEnabled = true;
+		public bool IsEnable {
+			get => _IsEnabled; 
+			set 
+			{
+				Set(ref _IsEnabled, value);
+			} 
+		}
 
+
+		public ICommand ShowCommand { get; private set; }
+
+		void ShowMethod(object param)
+		{
+			PopUpWindow w = new PopUpWindow();
+			w.ShowDialog();
+		}
 
 
 	}
