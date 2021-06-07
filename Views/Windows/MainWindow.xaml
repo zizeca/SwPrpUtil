@@ -7,19 +7,19 @@
 		xmlns:vm="clr-namespace:SwPrpUtil.ViewModels"
         xmlns:l="clr-namespace:SwPrpUtil"
         mc:Ignorable="d"
-        Title="{Binding Path=Title}" 
+        Title="{Binding Path=Title}"
 		Height="450" Width="800">
 	<Window.DataContext>
-		<vm:MainWindowViewModel/>
+		<vm:MainWindowViewModel />
 	</Window.DataContext>
 
 	<DockPanel>
-		<Menu DockPanel.Dock="Top" >
+		<Menu DockPanel.Dock="Top">
 			<MenuItem Header="Фаил" Height="30">
-				<MenuItem Header="Выход"/>
+				<MenuItem Header="Выход" />
 			</MenuItem>
 			<MenuItem Header="Помощь" Height="30">
-				<MenuItem Header="О программе"/>
+				<MenuItem Header="О программе" />
 			</MenuItem>
 		</Menu>
 		<StatusBar DockPanel.Dock="Bottom">
@@ -49,44 +49,44 @@
 			</StatusBarItem>
 		</StatusBar>
 		<TabControl>
-			<TabItem Header="Prop Editor" >
+			<TabItem Header="Prop Editor">
 				<Grid>
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*"/>
-						<ColumnDefinition Width="5"/>
-						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="5" />
+						<ColumnDefinition Width="*" />
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
-						<RowDefinition Height="60"/>
-						<RowDefinition Height="*"/>
+						<RowDefinition Height="60" />
+						<RowDefinition Height="*" />
 					</Grid.RowDefinitions>
 					<Grid Grid.Column="0" Grid.Row="0">
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="100"/>
-							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="100" />
+							<ColumnDefinition Width="*" />
 						</Grid.ColumnDefinitions>
 						<Grid.RowDefinitions>
-							<RowDefinition Height="30"/>
-							<RowDefinition Height="*"/>
+							<RowDefinition Height="30" />
+							<RowDefinition Height="*" />
 						</Grid.RowDefinitions>
 						<Button Content="Start">
 							<Button.Command>
-								<cmd:SldWorksRunTestCommand/>
+								<cmd:SldWorksRunTestCommand />
 							</Button.Command>
 						</Button>
 					</Grid>
-					<DataGrid Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False" >
+					<DataGrid Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False">
 						<DataGrid.Columns>
-							<DataGridTextColumn Header="Poperty Name"/>
-							<DataGridComboBoxColumn Header="Type"/>
-							<DataGridTextColumn Header="Value / Text expression"/>
+							<DataGridTextColumn Header="Poperty Name" />
+							<DataGridComboBoxColumn Header="Type" />
+							<DataGridTextColumn Header="Value / Text expression" />
 						</DataGrid.Columns>
 					</DataGrid>
 					<GridSplitter Grid.Column="1" Grid.RowSpan="2" Width="5" HorizontalAlignment="Stretch" />
 					<DataGrid Grid.Column="3" Grid.Row="1">
 						<DataGrid.Columns>
 							<DataGridTextColumn Header="File Name" MinWidth="100" />
-							<DataGridTextColumn Header="Status"/>
+							<DataGridTextColumn Header="Status" />
 						</DataGrid.Columns>
 					</DataGrid>
 				</Grid>
@@ -94,5 +94,4 @@
 			<TabItem Header="Prop deleter" ></TabItem>
 		</TabControl>
 	</DockPanel>
-	
 </Window>

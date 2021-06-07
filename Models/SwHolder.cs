@@ -91,11 +91,14 @@ namespace SwPrpUtil.Models
 
 		public void Dispose()
 		{
+			Debug.WriteLine("Try dispose swholder");
 			if (swApp != null && _shallExitApp)
 			{
 				swApp.CloseAllDocuments(true);
 				swApp.ExitApp();
 				swApp = null;
+
+				Debug.WriteLine("sww holder disposing");
 
 				//if process is not close
 				try
