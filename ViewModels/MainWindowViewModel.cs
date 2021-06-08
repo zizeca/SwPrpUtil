@@ -7,10 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using SwPrpUtil.Infrastructure;
+using System.ComponentModel;
+using System.Diagnostics;
 
 namespace SwPrpUtil.ViewModels
 {
-	internal class MainWindowViewModel : ViewModelBase, IDisposable
+	internal class MainWindowViewModel : ObservableObject
 	{
 		#region Title
 
@@ -26,7 +29,20 @@ namespace SwPrpUtil.ViewModels
 
 		public MainWindowViewModel()
 		{
-			Application.Current.MainWindow.Closing += (o, e) => { SwHolder.DisposeInstance(); };
+			try
+			{
+				Application.Current.MainWindow.Closing += MainWindow_Closing;
+			}
+			catch(Exception e)
+			{
+				Debug.WriteLine(string.Format("Catch exception {0}", e.Message));
+			}
+		}
+
+		private void MainWindow_Closing(object sender, CancelEventArgs e)
+		{
+			SwHolder.DisposeInstance();
+			e.Cancel = false;
 		}
 	}
 }
