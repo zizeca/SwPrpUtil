@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:cmd="clr-namespace:SwPrpUtil.Infrastructure.Commands"
 		xmlns:vm="clr-namespace:SwPrpUtil.ViewModels"
+		xmlns:infr="clr-namespace:SwPrpUtil.Infrastructure"
         xmlns:l="clr-namespace:SwPrpUtil"
         mc:Ignorable="d"
         Title="{Binding Path=Title}"
-		Height="450" Width="800">
+		Height="450" Width="800" WindowStartupLocation="CenterScreen">
 	<Window.DataContext>
-		<vm:MainWindowViewModel />
+		<vm:MainWindowViewModel/>
 	</Window.DataContext>
 
 	<DockPanel>
@@ -69,10 +70,8 @@
 							<RowDefinition Height="30" />
 							<RowDefinition Height="*" />
 						</Grid.RowDefinitions>
-						<Button Content="Start">
-							<Button.Command>
-								<cmd:SldWorksRunTestCommand />
-							</Button.Command>
+						<Button Content="Start" Command="{Binding Path=OpenImportDialog}">
+
 						</Button>
 					</Grid>
 					<DataGrid Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False">

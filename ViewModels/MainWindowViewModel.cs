@@ -10,6 +10,8 @@ using System.Windows.Input;
 using SwPrpUtil.Infrastructure;
 using System.ComponentModel;
 using System.Diagnostics;
+using SwPrpUtil.Infrastructure.Commands;
+using SwPrpUtil.Views.Windows;
 
 namespace SwPrpUtil.ViewModels
 {
@@ -37,12 +39,25 @@ namespace SwPrpUtil.ViewModels
 			{
 				Debug.WriteLine(string.Format("Catch exception {0}", e.Message));
 			}
+
+			OpenImportDialog = new RelayCommand(ShowImportDialog);
+
 		}
+
+
+		public ICommand OpenImportDialog { get; set; }
 
 		private void MainWindow_Closing(object sender, CancelEventArgs e)
 		{
 			SwHolder.DisposeInstance();
 			e.Cancel = false;
 		}
+
+		private void ShowImportDialog(object parameter)
+		{
+			ImportDialog dialog = new ImportDialog();
+			dialog.ShowDialog();
+		}
+
 	}
 }
