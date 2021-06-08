@@ -20,9 +20,15 @@ namespace SwPrpUtil.Infrastructure
 			Dispose(true);
 		}
 
+		// ~VievModel()
+		// {
+		//		Dispode(false);
+		// }
+
 		protected void Dispose(bool Disposing)
 		{
 			if (!Disposing || _disposed) return;
+			_disposed = true;
 		}
 
 		#endregion Dispose
