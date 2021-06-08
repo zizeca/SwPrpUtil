@@ -126,7 +126,10 @@ namespace SwPrpUtil.Models
 					return "Application Busy";
 
 				default:
-					return "";
+					if (GetFlags(error_E).Count() > 0)
+						return string.Format("Found {0} error", GetFlags(error_E).Count());
+					else
+						return "Unknown error";
 			}
 		}
 
