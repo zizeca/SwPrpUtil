@@ -25,7 +25,7 @@ namespace SwPrpUtil.Infrastructure
 		//		Dispode(false);
 		// }
 
-		protected void Dispose(bool Disposing)
+		protected virtual void Dispose(bool Disposing)
 		{
 			if (!Disposing || _disposed) return;
 			_disposed = true;
