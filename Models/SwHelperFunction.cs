@@ -24,7 +24,7 @@ namespace SwPrpUtil.Models
 		/// <exception cref="NotSupportedException">
 		/// Throw if file not supported in this application.
 		/// </exception>
-		public static swDocumentTypes_e GetTypeIdFromExtension(string path)
+		public static swDocumentTypes_e GetSwDocTypeIdFromExtension(string path)
 		{
 			if (string.IsNullOrEmpty(path) || !File.Exists(path) || !Path.HasExtension(path))
 			{
@@ -49,9 +49,26 @@ namespace SwPrpUtil.Models
 			}
 		}
 
-		public static string SwOpenDocErrorToString(swFileLoadError_e error_E)
+
+		#region Parse sw load file
+
+		/// <summary>
+		/// Parser solidworks open doc errors
+		/// </summary>
+		/// <param name="ErrorCode"></param>
+		/// <returns>list with errors</returns>
+		public static IEnumerable<string> SwOpenDocErrorToString(int ErrorCode)
 		{
-			switch (error_E)
+			IEnumerable<Enum> flags = GetFlags((swFileLoadError_e)ErrorCode);
+			foreach (var flag in flags)
+			{
+				yield return SwFailLoadCodeToString((swFileLoadError_e)flag);
+			}
+		}
+
+		private static string SwFailLoadCodeToString(swFileLoadError_e Error)
+		{
+			switch (Error)
 			{
 				case swFileLoadError_e.swGenericError:
 					return "Another error was encountered";
@@ -124,15 +141,26 @@ namespace SwPrpUtil.Models
 
 				case swFileLoadError_e.swApplicationBusy:
 					return "Application Busy";
-
 				default:
-					if (GetFlags(error_E).Count() > 0)
-						return string.Format("Found {0} error", GetFlags(error_E).Count());
-					else
-						return "Unknown error";
+					return string.Format("Unknown error (swFileLoadError_e = {0:X}).", (int)Error);
 			}
 		}
 
+
+		#endregion Parse sw load file
+
+
+		/// <summary>
+		/// Method parser flags
+		/// </summary>
+		/// <remarks>
+		/// Input:
+		///	  Enum flags = flag1 | flag2 | ... | flagN
+		///	Output:
+		///	  IEnumerable<Enum> f = {flag1, flag2, ... , flagN }
+		/// </remarks>
+		/// <param name="input">Enumiration flags</param>
+		/// <returns>Array flags</returns>
 		private static IEnumerable<Enum> GetFlags(Enum input)
 		{
 			foreach (Enum value in Enum.GetValues(input.GetType()))
