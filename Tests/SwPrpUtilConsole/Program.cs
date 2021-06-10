@@ -24,6 +24,7 @@ namespace SwPrpUtilConsole
 		{
 			IEnumerable<Enum> e1 = GetFlags(f);
 			IEnumerable<Enum> e2 = GetFlags(z);
+			IEnumerable<Enum> e3 = GetUniqueFlags(z);
 
 			Console.WriteLine("test flags f");
 			foreach (var item in e1)
@@ -37,6 +38,13 @@ namespace SwPrpUtilConsole
 				Console.Write("{0} ,", item.ToString());
 			}
 
+			Console.WriteLine("test unique flags z");
+			foreach (var item in e3)
+			{
+				Console.Write("{0} ,", item.ToString());
+			}
+
+
 			Console.Read();
 		}
 
@@ -45,6 +53,24 @@ namespace SwPrpUtilConsole
 			foreach (Enum value in Enum.GetValues(input.GetType()))
 				if (input.HasFlag(value))
 					yield return value;
+		}
+
+		public static IEnumerable<Enum> GetUniqueFlags(Enum flags)
+		{
+			ulong flag = 1;
+			foreach (var value in Enum.GetValues(flags.GetType()).Cast<Enum>())
+			{
+				ulong bits = Convert.ToUInt64(value);
+				while (flag < bits)
+				{
+					flag <<= 1;
+				}
+
+				if (flag == bits && flags.HasFlag(value))
+				{
+					yield return value;
+				}
+			}
 		}
 	}
 }
