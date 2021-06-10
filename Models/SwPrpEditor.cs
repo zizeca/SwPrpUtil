@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.ServiceModel.Configuration;
 using System.Threading.Tasks;
 
 namespace SwPrpUtil.Models
@@ -21,10 +20,6 @@ namespace SwPrpUtil.Models
 		public string StatusMessage { get => _statusMessage; set => Set(ref _statusMessage, value); }
 
 		public SwPrpEditor()
-		{
-		}
-
-		private async Task runSldWorks()
 		{
 		}
 
@@ -74,8 +69,7 @@ namespace SwPrpUtil.Models
 		{
 			//Run solidworks ( or get exist solidworks object)
 			//Open file in solidworks
-			//open a new window with the dialog - from where to import properties (main properties or configuration properties)
-			//read selected properties
+			//read configName properties
 			//add properties to _swSourceProperties
 
 			if (string.IsNullOrEmpty(pathToFile) || !File.Exists(pathToFile))
@@ -89,7 +83,7 @@ namespace SwPrpUtil.Models
 			catch (Exception e)
 			{
 				StatusMessage = string.Format("Cautch error esception {0}", e.Message);
-				throw e;
+				return false;
 			}
 			StatusMessage = "Solidworks Started";
 
@@ -101,11 +95,22 @@ namespace SwPrpUtil.Models
 			int Warning = 0;
 
 			ModelDoc2 doc = _swApp.OpenDoc6(pathToFile,
-											(int)SwHelperFunction.GetTypeIdFromExtension(pathToFile),
+											(int)SwHelperFunction.GetSwDocTypeIdFromExtension(pathToFile),
 											(int)(swOpenDocOptions_e.swOpenDocOptions_Silent | swOpenDocOptions_e.swOpenDocOptions_ReadOnly),
 											configName,
 											ref Error,
 											ref Warning);
+			if (Error != 0)
+				throw new FileLoadException(string.Format("Open file error code {0:X}", Error));
+
+			if (Warning != 0)
+				Debug.WriteLine(string.Format("Open file has warning, code: {0:X}", Warning));
+
+			doc.Rebuild((int)swRebuildOptions_e.swRebuildAll);
+
+			CustomPropertyManager manager = doc.Extension.CustomPropertyManager[configName];
+
+
 
 			#endregion Open_Document
 
