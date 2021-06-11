@@ -98,6 +98,7 @@
     <Compile Include="Infrastructure\ObservableObject.cs" />
     <Compile Include="Models\SwFileConfiguration.cs" />
     <Compile Include="Models\SwFileItem.cs" />
+    <Compile Include="Models\SwFileSummaryInfo.cs" />
     <Compile Include="Models\SwHelperFunction.cs" />
     <Compile Include="Models\SwHolder.cs" />
     <Compile Include="Models\SwProperty.cs" />

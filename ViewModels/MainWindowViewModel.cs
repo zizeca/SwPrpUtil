@@ -45,7 +45,7 @@ namespace SwPrpUtil.ViewModels
 		}
 
 
-		public ICommand OpenImportDialog { get; set; }
+		public ICommand OpenImportDialog { get; private set; }
 
 		private void MainWindow_Closing(object sender, CancelEventArgs e)
 		{

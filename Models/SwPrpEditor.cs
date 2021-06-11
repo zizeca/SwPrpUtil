@@ -14,8 +14,6 @@ namespace SwPrpUtil.Models
 		private List<SwFileItem> _swFileItems;
 		private List<SwProperty> _swSourceProperties;
 
-		private SldWorks _swApp;
-
 		private string _statusMessage;
 		public string StatusMessage { get => _statusMessage; set => Set(ref _statusMessage, value); }
 
@@ -75,10 +73,12 @@ namespace SwPrpUtil.Models
 			if (string.IsNullOrEmpty(pathToFile) || !File.Exists(pathToFile))
 				throw new ArgumentException(nameof(pathToFile));
 
+			///Start or get solidworks process
 			StatusMessage = "Run SolidWorks";
+			SldWorks swApp;
 			try
 			{
-				_swApp = await SwHolder.Instance.GetSwAppAsync();
+				swApp = await SwHolder.Instance.GetSwAppAsync();
 			}
 			catch (Exception e)
 			{
@@ -87,14 +87,14 @@ namespace SwPrpUtil.Models
 			}
 			StatusMessage = "Solidworks Started";
 
-			_swApp.SetCurrentWorkingDirectory(Path.GetDirectoryName(pathToFile));
+			_ = swApp.SetCurrentWorkingDirectory(Path.GetDirectoryName(pathToFile));
 
 			#region Open_Document
 
 			int Error = 0;
 			int Warning = 0;
 
-			ModelDoc2 doc = _swApp.OpenDoc6(pathToFile,
+			ModelDoc2 doc = swApp.OpenDoc6(pathToFile,
 											(int)SwHelperFunction.GetSwDocTypeIdFromExtension(pathToFile),
 											(int)(swOpenDocOptions_e.swOpenDocOptions_Silent | swOpenDocOptions_e.swOpenDocOptions_ReadOnly),
 											configName,
@@ -108,11 +108,13 @@ namespace SwPrpUtil.Models
 
 			doc.Rebuild((int)swRebuildOptions_e.swRebuildAll);
 
+			#endregion Open_Document
+
+
 			CustomPropertyManager manager = doc.Extension.CustomPropertyManager[configName];
 
 
 
-			#endregion Open_Document
 
 			throw new NotImplementedException();
 		}
