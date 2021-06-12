@@ -20,7 +20,7 @@
 	<Window.Resources>
 		<ObjectDataProvider x:Key="typeEnum" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
 			<ObjectDataProvider.MethodParameters>
-				<x:Type Type="swconst:swCustomInfoType_e" />
+				<x:Type Type="inf:PrpType" />
 			</ObjectDataProvider.MethodParameters>
 		</ObjectDataProvider>
 		<inf:PropertyTypeConverter x:Key="PropertyTypeConverter" />
@@ -85,11 +85,13 @@
 						<Button Content="Start" Command="{Binding Path=OpenImportDialog}">
 						</Button>
 					</Grid>
-					<DataGrid Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Path=SourceProperties}" AutoGenerateColumns="False">
+					<DataGrid Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Path=SourceProperties}" AutoGenerateColumns="False" IsReadOnly="False">
 						<DataGrid.Columns>
 							<DataGridTextColumn Header="Poperty Name" Binding="{Binding Path=PropertyName}" />
 							<DataGridComboBoxColumn
-								Header="Type" />
+								Header="Type"
+								SelectedItemBinding="{Binding Path=TypePrp, Converter={StaticResource PropertyTypeConverter}}"
+								ItemsSource="{Binding Source={StaticResource typeEnum}}" />
 							<DataGridTextColumn Header="Value / Text expression" />
 						</DataGrid.Columns>
 					</DataGrid>
