@@ -84,6 +84,8 @@ namespace SwPrpUtil.ViewModels
 
 			#endregion Command_relay
 
+			_sourceProperties = new List<SwProperty>();
+
 			_editor = new SwPrpEditor();
 
 			_editor.PropertyChanged += (s, e) =>

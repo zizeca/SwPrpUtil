@@ -85,14 +85,21 @@
 						<Button Content="Start" Command="{Binding Path=OpenImportDialog}">
 						</Button>
 					</Grid>
-					<DataGrid Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Path=SourceProperties}" AutoGenerateColumns="False" IsReadOnly="False">
+					<DataGrid Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Path=SourceProperties}" CanUserAddRows="True" AutoGenerateColumns="False" IsReadOnly="False">
 						<DataGrid.Columns>
-							<DataGridTextColumn Header="Poperty Name" Binding="{Binding Path=PropertyName}" />
+							<DataGridTextColumn
+								Header="Poperty Name"
+								Binding="{Binding Path=PropertyName}"
+								Width="auto" />
 							<DataGridComboBoxColumn
 								Header="Type"
 								SelectedItemBinding="{Binding Path=TypePrp, Converter={StaticResource PropertyTypeConverter}}"
-								ItemsSource="{Binding Source={StaticResource typeEnum}}" />
-							<DataGridTextColumn Header="Value / Text expression" />
+								ItemsSource="{Binding Source={StaticResource typeEnum}}"
+								MinWidth="80" />
+							<DataGridTextColumn
+								Header="Value / Text expression"
+								Binding="{Binding Path=Expression}"
+								Width="*" />
 						</DataGrid.Columns>
 					</DataGrid>
 					<GridSplitter Grid.Column="1" Grid.RowSpan="2" Width="5" HorizontalAlignment="Stretch" />
