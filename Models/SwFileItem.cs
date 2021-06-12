@@ -30,7 +30,7 @@ namespace SwPrpUtil.Models
 
 		#endregion Path_properies
 
-		public SwFileSummaryInfo FileSummaryInfo;
+		public SwFileSummaryInfo SummaryInfo;
 
 		// Main custom property
 		public SwProperty MainProperty;
