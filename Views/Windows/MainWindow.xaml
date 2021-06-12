@@ -10,8 +10,9 @@
         mc:Ignorable="d"
         Title="{Binding Path=Title}"
 		Height="450" Width="800" WindowStartupLocation="CenterScreen">
+
 	<Window.DataContext>
-		<vm:MainWindowViewModel/>
+		<vm:MainWindowViewModel />
 	</Window.DataContext>
 
 	<DockPanel>
@@ -42,7 +43,7 @@
 			</StatusBarItem>
 			<Separator Grid.Column="1" />
 			<StatusBarItem Grid.Column="2">
-				<TextBlock Text="c:\path\of\current\file.txt" />
+				<TextBlock Text="{Binding Path=StatusText, Mode=TwoWay}" />
 			</StatusBarItem>
 			<Separator Grid.Column="3" />
 			<StatusBarItem Grid.Column="4">
@@ -71,7 +72,6 @@
 							<RowDefinition Height="*" />
 						</Grid.RowDefinitions>
 						<Button Content="Start" Command="{Binding Path=OpenImportDialog}">
-
 						</Button>
 					</Grid>
 					<DataGrid Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False">

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SolidWorks.Interop.swconst;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace SwPrpUtil.Models
 {
+	/*
 	public enum PrpType
 	{
 		TEXT,
@@ -13,11 +15,15 @@ namespace SwPrpUtil.Models
 		NUMBER,
 		YES_OR_NO
 	}
+		//public PrpType TypePrp;
+	*/
 
 	public struct SwProperty
 	{
-		string PropertyName;
-		PrpType TypePrp;
-		string Expression;
+		public string PropertyName;
+
+		public swCustomInfoType_e TypePrp;
+
+		public string Expression;
 	}
 }

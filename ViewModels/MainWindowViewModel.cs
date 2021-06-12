@@ -12,6 +12,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using SwPrpUtil.Infrastructure.Commands;
 using SwPrpUtil.Views.Windows;
+using Microsoft.Win32;
+using System.Threading;
 
 namespace SwPrpUtil.ViewModels
 {
@@ -29,23 +31,53 @@ namespace SwPrpUtil.ViewModels
 
 		#endregion Title
 
+		private SwPrpEditor _editor = null;
+
+		//private string _statusText;
+
+		private string _statusText = "Ready";
+
+		public string StatusText
+		{
+			get => _statusText;
+			set => Set(ref _statusText, value);
+		}
+
 		public MainWindowViewModel()
 		{
+			//*
 			try
 			{
 				Application.Current.MainWindow.Closing += MainWindow_Closing;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				Debug.WriteLine(string.Format("Catch exception {0}", e.Message));
 			}
+			//*/
+			OpenImportDialog = new AsyncRelayCommand(ShowImportDialog);
 
-			OpenImportDialog = new RelayCommand(ShowImportDialog);
+			_editor = new SwPrpEditor();
 
+			_editor.PropertyChanged += (s, e) =>
+			{
+				if (e.PropertyName == "StatusMessage")
+				{
+					StatusText = _editor.StatusMessage;
+				}
+			};
 		}
 
+		private void prpchg(object sender, PropertyChangedEventArgs e)
+		{
+			Debug.WriteLine(string.Format("invoke {0}", e.PropertyName));
+			if (e.PropertyName == "StatusMessage")
+			{
+				this.OnPropertyChanged(nameof(StatusText));
+			}
+		}
 
-		public ICommand OpenImportDialog { get; private set; }
+		public ICommand OpenImportDialog { get; set; }
 
 		private void MainWindow_Closing(object sender, CancelEventArgs e)
 		{
@@ -53,11 +85,20 @@ namespace SwPrpUtil.ViewModels
 			e.Cancel = false;
 		}
 
-		private void ShowImportDialog(object parameter)
+		private async Task ShowImportDialog()
 		{
+			/*
 			ImportDialog dialog = new ImportDialog();
 			dialog.ShowDialog();
-		}
+			*/
+			Title = "Import";
 
+			OpenFileDialog dialog = new OpenFileDialog();
+			dialog.ShowDialog();
+			string path = dialog.FileName;
+
+			_ = await _editor.ImportPropertiesFromFile(path);
+			OnPropertyChanged(nameof(StatusText));
+		}
 	}
 }

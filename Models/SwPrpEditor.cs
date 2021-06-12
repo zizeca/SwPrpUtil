@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SwPrpUtil.Models
@@ -14,11 +16,26 @@ namespace SwPrpUtil.Models
 		private List<SwFileItem> _swFileItems;
 		private List<SwProperty> _swSourceProperties;
 
-		private string _statusMessage;
-		public string StatusMessage { get => _statusMessage; set => Set(ref _statusMessage, value); }
+		private string _statusMessage = "Ready";
+
+		public string StatusMessage
+		{
+			get => _statusMessage;
+			set
+			{
+				Set(ref _statusMessage, value);
+			}
+		}
+
+		private void RaiseChange(object o)
+		{
+			OnPropertyChanged((string)o);
+		}
 
 		public SwPrpEditor()
 		{
+			_swSourceProperties = new List<SwProperty>();
+			_swFileItems = new List<SwFileItem>();
 		}
 
 		public bool AddFolder(string pathToFolder)
@@ -74,6 +91,7 @@ namespace SwPrpUtil.Models
 				throw new ArgumentException(nameof(pathToFile));
 
 			///Start or get solidworks process
+
 			StatusMessage = "Run SolidWorks";
 			SldWorks swApp;
 			try
@@ -91,15 +109,26 @@ namespace SwPrpUtil.Models
 
 			#region Open_Document
 
-			int Error = 0;
-			int Warning = 0;
+			int Error = 0; // file load error code
+			int Warning = 0; // file load warning code
 
-			ModelDoc2 doc = swApp.OpenDoc6(pathToFile,
-											(int)SwHelperFunction.GetSwDocTypeIdFromExtension(pathToFile),
-											(int)(swOpenDocOptions_e.swOpenDocOptions_Silent | swOpenDocOptions_e.swOpenDocOptions_ReadOnly),
-											configName,
-											ref Error,
-											ref Warning);
+			ModelDoc2 doc;
+
+			doc = swApp.GetOpenDocumentByName(pathToFile); // check if file is open, return ModelDoc2 or null
+
+			if (doc == null)
+			{
+				StatusMessage = string.Format("Openning... {0}", Path.GetFileName(pathToFile));
+
+				//Open document
+				doc = swApp.OpenDoc6(pathToFile,
+										(int)SwHelperFunction.GetSwDocTypeIdFromExtension(pathToFile),
+										(int)(swOpenDocOptions_e.swOpenDocOptions_Silent | swOpenDocOptions_e.swOpenDocOptions_ReadOnly),
+										configName,
+										ref Error,
+										ref Warning);
+			}
+
 			if (Error != 0)
 				throw new FileLoadException(string.Format("Open file error code {0:X}", Error));
 
@@ -110,13 +139,39 @@ namespace SwPrpUtil.Models
 
 			#endregion Open_Document
 
-
 			CustomPropertyManager manager = doc.Extension.CustomPropertyManager[configName];
 
+			object PropNames = null;
+			object PropTypes = null;
+			object PropValues = null;
+			object Resolved = null;
+			object PropLink = null;
+			int PropCount = 0;
 
+			PropCount = manager.GetAll3(ref PropNames, ref PropTypes, ref PropValues, ref Resolved, ref PropLink);
 
+			try
+			{
+				StatusMessage = string.Format("Found {0} properties", PropCount);
+				for (int i = 0; i < PropCount; i++)
+				{
+					SwProperty prp = new SwProperty
+					{
+						PropertyName = ((string[])PropNames)[i],
+						TypePrp = (swCustomInfoType_e)((int[])PropTypes)[i],
+						Expression = ((string[])PropValues)[i]
+					};
+					Debug.WriteLine(string.Format("Add prp: {0}|{1}|{2}", prp.PropertyName, prp.TypePrp.ToString(), prp.Expression));
+					_swSourceProperties.Add(prp);
+				}
+			}
+			catch (Exception e)
+			{
+				StatusMessage = string.Format("Catch exception {0}", e.Message);
+			}
 
-			throw new NotImplementedException();
+			doc.Quit();
+			return true;
 		}
 
 		public void RunProcess()
