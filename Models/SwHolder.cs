@@ -30,6 +30,16 @@ namespace SwPrpUtil.Models
 		private static bool _shallExitApp = true;
 		private static bool _sldVisible = false;
 
+		public static bool SwAppIsRun()
+		{
+			if (_instance == null || _instance.swApp == null) return false;
+
+			Process[] pname = Process.GetProcessesByName("SldWorks");
+			if (pname.Length != 0 && _instance.swApp != (pname[0] as SldWorks)) return false;
+
+			return true;
+		}
+
 		public async Task<SldWorks> GetSwAppAsync()
 		{
 			//throw new InvalidOperationException("Test exception");
