@@ -7,8 +7,6 @@
 		xmlns:cmd="clr-namespace:SwPrpUtil.Infrastructure.Commands"
 		xmlns:inf="clr-namespace:SwPrpUtil.Infrastructure"
 		xmlns:vm="clr-namespace:SwPrpUtil.ViewModels"
-		xmlns:infr="clr-namespace:SwPrpUtil.Infrastructure"
-		xmlns:swconst="clr-namespace:SolidWorks.Interop.swconst;assembly=SolidWorks.Interop.swconst"
         xmlns:l="clr-namespace:SwPrpUtil"
         mc:Ignorable="d"
         Title="{Binding Path=Title}"
@@ -65,13 +63,13 @@
 			<TabItem Header="Prop Editor">
 				<Grid>
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="*" MinWidth="200" />
 						<ColumnDefinition Width="5" />
-						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="*" MinWidth="200" />
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="60" />
-						<RowDefinition Height="*" />
+						<RowDefinition Height="*" MinHeight="200" />
 					</Grid.RowDefinitions>
 					<Grid Grid.Column="0" Grid.Row="0">
 						<Grid.ColumnDefinitions>
@@ -85,33 +83,39 @@
 						<Button Content="Start" Command="{Binding Path=OpenImportDialog}">
 						</Button>
 					</Grid>
-					<DataGrid Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Path=SourceProperties}" CanUserAddRows="True" AutoGenerateColumns="False" IsReadOnly="False">
-						<DataGrid.Columns>
-							<DataGridTextColumn
+					<GroupBox Header="Properties" Grid.Column="0" Grid.Row="1">
+						<DataGrid  ItemsSource="{Binding Path=SourceProperties}" CanUserAddRows="True" AutoGenerateColumns="False" IsReadOnly="False">
+							<DataGrid.Columns>
+
+								<DataGridTextColumn
 								Header="Poperty Name"
 								Binding="{Binding Path=PropertyName}"
 								Width="auto" />
-							<DataGridComboBoxColumn
+
+								<DataGridComboBoxColumn
 								Header="Type"
 								SelectedItemBinding="{Binding Path=TypePrp, Converter={StaticResource PropertyTypeConverter}}"
 								ItemsSource="{Binding Source={StaticResource typeEnum}}"
 								MinWidth="80" />
-							<DataGridTextColumn
+
+								<DataGridTextColumn
 								Header="Value / Text expression"
 								Binding="{Binding Path=Expression}"
 								Width="*" />
-						</DataGrid.Columns>
-					</DataGrid>
-					<GridSplitter Grid.Column="1" Grid.RowSpan="2" Width="5" HorizontalAlignment="Stretch" />
-					<DataGrid Grid.Column="3" Grid.Row="1">
-						<DataGrid.Columns>
-							<DataGridTextColumn Header="File Name" MinWidth="100" />
-							<DataGridTextColumn Header="Status" />
-						</DataGrid.Columns>
-					</DataGrid>
+							</DataGrid.Columns>
+						</DataGrid>
+					</GroupBox>
+					<GridSplitter Grid.Column="1" Grid.RowSpan="2" Width="5" HorizontalAlignment="Stretch" Foreground="#FF2A21D6" Background="#FFC3DCEE" />
+					<GroupBox Header="Files" Grid.Column="3" Grid.Row="1">
+						<DataGrid>
+							<DataGrid.Columns>
+								<DataGridTextColumn Header="File Name" MinWidth="100" />
+								<DataGridTextColumn Header="Status" />
+							</DataGrid.Columns>
+						</DataGrid>
+					</GroupBox>
 				</Grid>
 			</TabItem>
-			<TabItem Header="Prop deleter" ></TabItem>
 		</TabControl>
 	</DockPanel>
 </Window>

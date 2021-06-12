@@ -4,11 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SwPrpUtil.Views.Windows"
+		xmlns:vm="clr-namespace:SwPrpUtil.ViewModels"
         mc:Ignorable="d"
-        Title="Import properties" Height="300" Width="602" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="NoResize"
-	    
-		>
-    <Grid>
-        
-    </Grid>
+        Title="Import properties" Height="300" Width="602" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="NoResize">
+	<Window.DataContext>
+		<vm:ImportDialogViewModel />
+	</Window.DataContext>
+	<Grid>
+	</Grid>
 </Window>
