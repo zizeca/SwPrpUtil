@@ -19,6 +19,8 @@ namespace SwPrpUtil.ViewModels
 {
 	internal class MainWindowViewModel : ObservableObject
 	{
+		#region Properties_for_view
+
 		#region Title
 
 		private string _Title = "Property Utils";
@@ -31,9 +33,9 @@ namespace SwPrpUtil.ViewModels
 
 		#endregion Title
 
-		private SwPrpEditor _editor = null;
-
 		//private string _statusText;
+
+		#region StatusBarText
 
 		private string _statusText = "Ready";
 
@@ -43,9 +45,28 @@ namespace SwPrpUtil.ViewModels
 			set => Set(ref _statusText, value);
 		}
 
+		#endregion StatusBarText
+
+		#region List_properties
+
+		private List<SwProperty> _sourceProperties;
+
+		public List<SwProperty> SourceProperties
+		{ get => _sourceProperties; set => Set(ref _sourceProperties, value); }
+
+		#endregion List_properties
+
+		#endregion Properties_for_view
+
+		// class for manipulated with sollidworks files
+		private SwPrpEditor _editor = null;
+
+		// ctor
 		public MainWindowViewModel()
 		{
-			//*
+			#region Closing_Event_handle
+
+			// Closing event
 			try
 			{
 				Application.Current.MainWindow.Closing += MainWindow_Closing;
@@ -54,8 +75,14 @@ namespace SwPrpUtil.ViewModels
 			{
 				Debug.WriteLine(string.Format("Catch exception {0}", e.Message));
 			}
-			//*/
+
+			#endregion Closing_Event_handle
+
+			#region Command_relay
+
 			OpenImportDialog = new AsyncRelayCommand(ShowImportDialog);
+
+			#endregion Command_relay
 
 			_editor = new SwPrpEditor();
 
@@ -66,24 +93,19 @@ namespace SwPrpUtil.ViewModels
 					StatusText = _editor.StatusMessage;
 				}
 			};
+
+			_editor.PropertyChanged += (s, e) =>
+			{
+				if (e.PropertyName == "ImportedProperties")
+				{
+					SourceProperties = _editor.ImportedProperties;
+				}
+			};
 		}
 
-		private void prpchg(object sender, PropertyChangedEventArgs e)
-		{
-			Debug.WriteLine(string.Format("invoke {0}", e.PropertyName));
-			if (e.PropertyName == "StatusMessage")
-			{
-				this.OnPropertyChanged(nameof(StatusText));
-			}
-		}
+		#region Command_and_command_actions
 
 		public ICommand OpenImportDialog { get; set; }
-
-		private void MainWindow_Closing(object sender, CancelEventArgs e)
-		{
-			SwHolder.DisposeInstance();
-			e.Cancel = false;
-		}
 
 		private async Task ShowImportDialog()
 		{
@@ -99,6 +121,14 @@ namespace SwPrpUtil.ViewModels
 
 			_ = await _editor.ImportPropertiesFromFile(path);
 			OnPropertyChanged(nameof(StatusText));
+		}
+
+		#endregion Command_and_command_actions
+
+		private void MainWindow_Closing(object sender, CancelEventArgs e)
+		{
+			SwHolder.DisposeInstance();
+			e.Cancel = false;
 		}
 	}
 }

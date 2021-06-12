@@ -14,27 +14,26 @@ namespace SwPrpUtil.Models
 	internal class SwPrpEditor : ObservableObject
 	{
 		private List<SwFileItem> _swFileItems;
-		private List<SwProperty> _swSourceProperties;
+		private List<SwProperty> _importedProperties;
+		public List<SwProperty> ImportedProperties { get => _importedProperties; }
 
 		private string _statusMessage = "Ready";
 
+		/// <summary>
+		/// Status of state SwPrpEditor
+		/// </summary>
 		public string StatusMessage
 		{
 			get => _statusMessage;
-			set
+			private set
 			{
 				Set(ref _statusMessage, value);
 			}
 		}
 
-		private void RaiseChange(object o)
-		{
-			OnPropertyChanged((string)o);
-		}
-
 		public SwPrpEditor()
 		{
-			_swSourceProperties = new List<SwProperty>();
+			_importedProperties = new List<SwProperty>();
 			_swFileItems = new List<SwFileItem>();
 		}
 
@@ -135,6 +134,7 @@ namespace SwPrpUtil.Models
 			if (Warning != 0)
 				Debug.WriteLine(string.Format("Open file has warning, code: {0:X}", Warning));
 
+			StatusMessage = "Rebuild document";
 			doc.Rebuild((int)swRebuildOptions_e.swRebuildAll);
 
 			#endregion Open_Document
@@ -148,6 +148,7 @@ namespace SwPrpUtil.Models
 			object PropLink = null;
 			int PropCount = 0;
 
+			StatusMessage = "Get properties from " + (configName == "" ? "main properties" : configName);
 			PropCount = manager.GetAll3(ref PropNames, ref PropTypes, ref PropValues, ref Resolved, ref PropLink);
 
 			try
@@ -162,15 +163,16 @@ namespace SwPrpUtil.Models
 						Expression = ((string[])PropValues)[i]
 					};
 					Debug.WriteLine(string.Format("Add prp: {0}|{1}|{2}", prp.PropertyName, prp.TypePrp.ToString(), prp.Expression));
-					_swSourceProperties.Add(prp);
+					_importedProperties.Add(prp);
 				}
 			}
 			catch (Exception e)
 			{
-				StatusMessage = string.Format("Catch exception {0}", e.Message);
+				StatusMessage = "Catch exception" + e.Message;
 			}
 
 			doc.Quit();
+			OnPropertyChanged("ImportedProperties");
 			return true;
 		}
 
@@ -188,7 +190,7 @@ namespace SwPrpUtil.Models
 
 		public void ClearPropertyList()
 		{
-			_swSourceProperties.Clear();
+			_importedProperties.Clear();
 		}
 	}
 }

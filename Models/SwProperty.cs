@@ -18,12 +18,12 @@ namespace SwPrpUtil.Models
 		//public PrpType TypePrp;
 	*/
 
-	public struct SwProperty
+	public class SwProperty
 	{
-		public string PropertyName;
+		public string PropertyName { get; set; }
 
-		public swCustomInfoType_e TypePrp;
+		public swCustomInfoType_e TypePrp { get; set; }
 
-		public string Expression;
+		public string Expression { get; set; }
 	}
 }

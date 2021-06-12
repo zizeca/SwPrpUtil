@@ -3,9 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:core="clr-namespace:System;assembly=mscorlib"
 		xmlns:cmd="clr-namespace:SwPrpUtil.Infrastructure.Commands"
+		xmlns:inf="clr-namespace:SwPrpUtil.Infrastructure"
 		xmlns:vm="clr-namespace:SwPrpUtil.ViewModels"
 		xmlns:infr="clr-namespace:SwPrpUtil.Infrastructure"
+		xmlns:swconst="clr-namespace:SolidWorks.Interop.swconst;assembly=SolidWorks.Interop.swconst"
         xmlns:l="clr-namespace:SwPrpUtil"
         mc:Ignorable="d"
         Title="{Binding Path=Title}"
@@ -14,6 +17,14 @@
 	<Window.DataContext>
 		<vm:MainWindowViewModel />
 	</Window.DataContext>
+	<Window.Resources>
+		<ObjectDataProvider x:Key="typeEnum" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
+			<ObjectDataProvider.MethodParameters>
+				<x:Type Type="swconst:swCustomInfoType_e" />
+			</ObjectDataProvider.MethodParameters>
+		</ObjectDataProvider>
+		<inf:PropertyTypeConverter x:Key="PropertyTypeConverter" />
+	</Window.Resources>
 
 	<DockPanel>
 		<Menu DockPanel.Dock="Top">
@@ -74,10 +85,11 @@
 						<Button Content="Start" Command="{Binding Path=OpenImportDialog}">
 						</Button>
 					</Grid>
-					<DataGrid Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False">
+					<DataGrid Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Path=SourceProperties}" AutoGenerateColumns="False">
 						<DataGrid.Columns>
-							<DataGridTextColumn Header="Poperty Name" />
-							<DataGridComboBoxColumn Header="Type" />
+							<DataGridTextColumn Header="Poperty Name" Binding="{Binding Path=PropertyName}" />
+							<DataGridComboBoxColumn
+								Header="Type" />
 							<DataGridTextColumn Header="Value / Text expression" />
 						</DataGrid.Columns>
 					</DataGrid>
