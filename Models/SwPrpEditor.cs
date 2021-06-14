@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +14,9 @@ namespace SwPrpUtil.Models
 {
 	internal class SwPrpEditor : ObservableObject
 	{
-		private List<SwFileItem> _swFileItems;
+		private List<SwFileItem> _importedFiles;
+		public List<SwFileItem> ImportedFiles { get => _importedFiles; }
+
 		private List<SwProperty> _importedProperties;
 		public List<SwProperty> ImportedProperties { get => _importedProperties; }
 
@@ -34,7 +37,7 @@ namespace SwPrpUtil.Models
 		public SwPrpEditor()
 		{
 			_importedProperties = new List<SwProperty>();
-			_swFileItems = new List<SwFileItem>();
+			_importedFiles = new List<SwFileItem>();
 		}
 
 		public bool AddFolder(string pathToFolder)
@@ -49,34 +52,32 @@ namespace SwPrpUtil.Models
 				return false;
 			}
 
-			foreach (string fileName in files)
-			{
-				if (!AddFile(fileName))
-					Debug.WriteLine(string.Format("Ignoring file {0}", fileName));
-			}
+			AddFiles(files);
 
 			return true;
 		}
 
-		public bool AddFile(string pathToFile)
+		public void AddFiles(string[] pathes)
 		{
-			//Create SwFileItem and add to _swFileItems/
-			// get the file attributes for file or directory
-			if (!File.Exists(pathToFile))
-				throw new FileNotFoundException(pathToFile);
+			if (pathes == null || pathes.Count() == 0)
+				throw new ArgumentException(nameof(pathes));
 
-			string extension = Path.GetExtension(pathToFile)?.ToLower();
-			if (extension == ".sldprt" || extension == ".sldasm" || extension == ".slddrw")
+			foreach (string path in pathes)
 			{
-				SwFileItem fileItem = new SwFileItem();
-				fileItem.FilePath = pathToFile;
-				_swFileItems.Add(fileItem);
-				return true;
+				string extension = Path.GetExtension(path)?.ToLower();
+				if (extension == ".sldprt" || extension == ".sldasm" || extension == ".slddrw")
+				{
+					SwFileItem fileItem = new SwFileItem();
+					fileItem.FilePath = path;
+					_importedFiles.Add(fileItem);
+				}
+				else
+				{
+					Debug.WriteLine(string.Format("Ignoring file {0}", path));
+				}
 			}
-			else
-			{
-				return false;
-			}
+
+			OnPropertyChanged(nameof(ImportedFiles));
 		}
 
 		public async Task<bool> ImportPropertiesFromFile(string pathToFile, string configName = "")
@@ -185,7 +186,7 @@ namespace SwPrpUtil.Models
 
 		public void ClearFileList()
 		{
-			_swFileItems.Clear();
+			_importedFiles.Clear();
 		}
 
 		public void ClearPropertyList()
