@@ -187,11 +187,13 @@ namespace SwPrpUtil.Models
 		public void ClearFileList()
 		{
 			_importedFiles.Clear();
+			OnPropertyChanged(nameof(ImportedFiles));
 		}
 
 		public void ClearPropertyList()
 		{
 			_importedProperties.Clear();
+			OnPropertyChanged(nameof(ImportedProperties));
 		}
 	}
 }
