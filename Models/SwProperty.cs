@@ -20,6 +20,13 @@ namespace SwPrpUtil.Models
 
 	public class SwProperty
 	{
+		public SwProperty()
+		{
+			PropertyName = string.Empty;
+			TypePrp = swCustomInfoType_e.swCustomInfoUnknown;
+			Expression = string.Empty;
+		}
+
 		public string PropertyName { get; set; }
 
 		public swCustomInfoType_e TypePrp { get; set; }

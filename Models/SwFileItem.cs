@@ -30,12 +30,20 @@ namespace SwPrpUtil.Models
 
 		#endregion Path_properies
 
-		public SwFileSummaryInfo SummaryInfo;
+		public SwFileSummaryInfo SummaryInfo { get; set; }
 
 		// Main custom property
-		public SwProperty MainProperty;
+		public SwProperty MainProperty { get; set; }
 
 		//Configurations with self properties
-		public List<SwFileConfiguration> swFileConfigurations;
+		public List<SwFileConfiguration> swFileConfigurations { get; set; }
+
+		public SwFileItem()
+		{
+			FilePath = string.Empty;
+			SummaryInfo = new SwFileSummaryInfo();
+			MainProperty = new SwProperty();
+			swFileConfigurations = new List<SwFileConfiguration>();
+		}
 	}
 }
