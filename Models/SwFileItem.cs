@@ -33,7 +33,7 @@ namespace SwPrpUtil.Models
 		public SwFileSummaryInfo SummaryInfo { get; set; }
 
 		// Main custom property
-		public SwProperty MainProperty { get; set; }
+		public List<SwProperty> MainProperty { get; set; }
 
 		//Configurations with self properties
 		public List<SwFileConfiguration> swFileConfigurations { get; set; }
@@ -42,7 +42,7 @@ namespace SwPrpUtil.Models
 		{
 			FilePath = string.Empty;
 			SummaryInfo = new SwFileSummaryInfo();
-			MainProperty = new SwProperty();
+			MainProperty = new List<SwProperty>();
 			swFileConfigurations = new List<SwFileConfiguration>();
 		}
 	}
