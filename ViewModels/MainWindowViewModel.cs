@@ -12,8 +12,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using SwPrpUtil.Infrastructure.Commands;
 using SwPrpUtil.Views.Windows;
-using Microsoft.Win32;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace SwPrpUtil.ViewModels
 {
@@ -56,6 +56,18 @@ namespace SwPrpUtil.ViewModels
 
 		#endregion List_properties
 
+		#region Files_for_export_panel
+
+		private List<SwFileItem> _swFileItems;
+
+		public List<SwFileItem> SwFileItems
+		{
+			get => _swFileItems;
+			set => Set(ref _swFileItems, value);
+		}
+
+		#endregion Files_for_export_panel
+
 		#endregion Properties_for_view
 
 		// class for manipulated with sollidworks files
@@ -69,7 +81,7 @@ namespace SwPrpUtil.ViewModels
 			// Closing event
 			try
 			{
-				Application.Current.MainWindow.Closing += MainWindow_Closing;
+				System.Windows.Application.Current.MainWindow.Closing += MainWindow_Closing;
 			}
 			catch (Exception e)
 			{
@@ -80,27 +92,33 @@ namespace SwPrpUtil.ViewModels
 
 			#region Command_relay
 
-			OpenImportDialog = new AsyncRelayCommand(ShowImportDialog);
+			//OpenImportDialog = new AsyncRelayCommand(ShowImportDialog);
+			OpenImportDialog = new RelayCommand(OnOpenImportDialogExecuted);
+
+			AddFolder = new RelayCommand(OnAddFolderExecuted);
 
 			#endregion Command_relay
 
 			_sourceProperties = new List<SwProperty>();
+			_swFileItems = new List<SwFileItem>();
 
 			_editor = new SwPrpEditor();
 
 			_editor.PropertyChanged += (s, e) =>
 			{
-				if (e.PropertyName == "StatusMessage")
+				switch (e.PropertyName)
 				{
-					StatusText = _editor.StatusMessage;
-				}
-			};
+					case nameof(_editor.StatusMessage):
+						StatusText = _editor.StatusMessage;
+						break;
 
-			_editor.PropertyChanged += (s, e) =>
-			{
-				if (e.PropertyName == "ImportedProperties")
-				{
-					SourceProperties = _editor.ImportedProperties;
+					case nameof(_editor.ImportedProperties):
+						SourceProperties = _editor.ImportedProperties;
+						break;
+
+					case nameof(_editor.ImportedFiles):
+						SwFileItems = _editor.ImportedFiles;
+						break;
 				}
 			};
 		}
@@ -123,6 +141,27 @@ namespace SwPrpUtil.ViewModels
 
 			_ = await _editor.ImportPropertiesFromFile(path);
 			OnPropertyChanged(nameof(StatusText));
+		}
+
+		public void OnOpenImportDialogExecuted(object param)
+		{
+			ImportDialog w = new ImportDialog();
+			w.ShowDialog();
+		}
+
+		public ICommand AddFolder { get; set; }
+
+		private void OnAddFolderExecuted(object param)
+		{
+			FolderBrowserDialog dialog = new FolderBrowserDialog
+			{
+				ShowNewFolderButton = false
+			};
+
+			if (dialog.ShowDialog() == DialogResult.OK)
+			{
+				_ = _editor.AddFolder(dialog.SelectedPath);
+			}
 		}
 
 		#endregion Command_and_command_actions

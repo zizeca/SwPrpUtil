@@ -5,11 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SwPrpUtil.Views.Windows"
 		xmlns:vm="clr-namespace:SwPrpUtil.ViewModels"
+		xmlns:inf="clr-namespace:SwPrpUtil.Infrastructure"
+		xmlns:core="clr-namespace:System;assembly=mscorlib"
+		xmlns:model="clr-namespace:SwPrpUtil.Models"
         mc:Ignorable="d"
         Title="Import properties" Height="300" Width="602" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="NoResize">
 	<Window.DataContext>
 		<vm:ImportDialogViewModel />
 	</Window.DataContext>
+	<Window.Resources>
+		<ObjectDataProvider x:Key="typeEnum" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
+			<ObjectDataProvider.MethodParameters>
+				<x:Type Type="inf:PrpType" />
+			</ObjectDataProvider.MethodParameters>
+		</ObjectDataProvider>
+		<inf:PropertyTypeConverter x:Key="PropertyTypeConverter" />
+	</Window.Resources>
 	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="100" />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+		<StackPanel>
+			<Button Content="Import" Command="{Binding Path=ImoprtPorperties}" />
+		</StackPanel>
+		<TreeView x:Name="treeView" Grid.Column="1" ItemsSource="{Binding Path=FileItems}">
+			<TreeView.ItemTemplate>
+				<HierarchicalDataTemplate DataType="{x:Type model:SwFileItem}" ItemsSource="{Binding Path=swFileConfigurations}">
+					<TextBlock Text="{Binding Path=FileName}" />
+					<HierarchicalDataTemplate.ItemTemplate>
+						<HierarchicalDataTemplate DataType="{x:Type model:SwFileItem}" ItemsSource="{Binding FilePath}">
+							<TextBlock Text="{Binding Path=FilePath}" />
+						</HierarchicalDataTemplate>
+					</HierarchicalDataTemplate.ItemTemplate>
+				</HierarchicalDataTemplate>
+			</TreeView.ItemTemplate>
+		</TreeView>
 	</Grid>
 </Window>
