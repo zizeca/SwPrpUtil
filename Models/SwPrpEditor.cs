@@ -17,6 +17,9 @@ namespace SwPrpUtil.Models
 		private List<SwFileItem> _importedFiles;
 		public List<SwFileItem> ImportedFiles { get => _importedFiles; }
 
+		private List<SwFileItem> _sourceFiles = new List<SwFileItem>();
+		public List<SwFileItem> SourceFiles { get => _sourceFiles; }
+
 		private List<SwProperty> _importedProperties;
 		public List<SwProperty> ImportedProperties { get => _importedProperties; }
 
@@ -175,6 +178,128 @@ namespace SwPrpUtil.Models
 			doc.Quit();
 			OnPropertyChanged("ImportedProperties");
 			return true;
+		}
+
+		//temp
+		public async Task<bool> ImportSourceFile(string pathToFile)
+		{
+			//Run solidworks ( or get exist solidworks object)
+			//Open file in solidworks
+			//read configName properties
+			//add properties to _swSourceProperties
+
+			if (string.IsNullOrEmpty(pathToFile) || !File.Exists(pathToFile))
+				throw new ArgumentException(nameof(pathToFile));
+
+			///Start or get solidworks process
+
+			StatusMessage = "Run SolidWorks";
+			SldWorks swApp;
+			try
+			{
+				swApp = await SwHolder.Instance.GetSwAppAsync();
+			}
+			catch (Exception e)
+			{
+				StatusMessage = string.Format("Cautch error esception {0}", e.Message);
+				return false;
+			}
+			StatusMessage = "Solidworks Started";
+
+			_ = swApp.SetCurrentWorkingDirectory(Path.GetDirectoryName(pathToFile));
+
+			#region Open_Document
+
+			int Error = 0; // file load error code
+			int Warning = 0; // file load warning code
+
+			ModelDoc2 doc;
+
+			doc = swApp.GetOpenDocumentByName(pathToFile); // check if file is open, return ModelDoc2 or null
+
+			if (doc == null)
+			{
+				StatusMessage = string.Format("Openning... {0}", Path.GetFileName(pathToFile));
+
+				//Open document
+				doc = swApp.OpenDoc6(pathToFile,
+										(int)SwHelperFunction.GetSwDocTypeIdFromExtension(pathToFile),
+										(int)(swOpenDocOptions_e.swOpenDocOptions_Silent | swOpenDocOptions_e.swOpenDocOptions_ReadOnly),
+										"",
+										ref Error,
+										ref Warning);
+			}
+
+			if (Error != 0)
+				throw new FileLoadException(string.Format("Open file error code {0:X}", Error));
+
+			if (Warning != 0)
+				Debug.WriteLine(string.Format("Open file has warning, code: {0:X}", Warning));
+
+			StatusMessage = "Rebuild document";
+			doc.Rebuild((int)swRebuildOptions_e.swRebuildAll);
+
+			#endregion Open_Document
+
+			string[] configNames = (string[])doc.GetConfigurationNames();
+
+			if (configNames == null || configNames.Count() == 0)
+				throw new Exception("Configuration get exception");
+
+			SwFileItem file = new SwFileItem();
+
+			file.FilePath = pathToFile;
+			file.MainProperty = GetSwProperties(ref doc, "");
+
+			foreach (string configuration in configNames)
+			{
+				SwFileConfiguration fc = new SwFileConfiguration(configuration, GetSwProperties(ref doc, configuration));
+				file.swFileConfigurations.Add(fc);
+			}
+
+			_sourceFiles.Add(file);
+
+			doc.Quit();
+			OnPropertyChanged(nameof(SourceFiles));
+
+			return true;
+		}
+
+		private List<SwProperty> GetSwProperties(ref ModelDoc2 doc, string configName)
+		{
+			List<SwProperty> retList = new List<SwProperty>();
+
+			CustomPropertyManager manager = doc.Extension.CustomPropertyManager[configName];
+
+			object PropNames = null;
+			object PropTypes = null;
+			object PropValues = null;
+			object Resolved = null;
+			object PropLink = null;
+			int PropCount = 0;
+
+			PropCount = manager.GetAll3(ref PropNames, ref PropTypes, ref PropValues, ref Resolved, ref PropLink);
+
+			try
+			{
+				StatusMessage = string.Format("Found {0} properties", PropCount);
+				for (int i = 0; i < PropCount; i++)
+				{
+					SwProperty prp = new SwProperty
+					{
+						PropertyName = ((string[])PropNames)[i],
+						TypePrp = (swCustomInfoType_e)((int[])PropTypes)[i],
+						Expression = ((string[])PropValues)[i]
+					};
+					Debug.WriteLine(string.Format("Add prp: {0}|{1}|{2}", prp.PropertyName, prp.TypePrp.ToString(), prp.Expression));
+					retList.Add(prp);
+				}
+			}
+			catch (Exception e)
+			{
+				StatusMessage = "Catch exception" + e.Message;
+			}
+			return retList;
 		}
 
 		public void RunProcess()
