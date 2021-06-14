@@ -48,6 +48,34 @@ namespace SwPrpUtil.ViewModels
 						break;
 				}
 			};
+
+			//test code
+			SwFileItem item = new SwFileItem();
+			SwFileItem item2 = new SwFileItem();
+
+			item.FilePath = @"D:\1.Сurrent_work\vinnik\0712-01-01-001.sldprt";
+			item2.FilePath = @"D:\1.Сurrent_work\vinnik\0712-01-01-002.sldprt";
+			item.MainProperty = new List<SwProperty>();
+			item2.MainProperty = new List<SwProperty>();
+
+			SwProperty prp = new SwProperty();
+			prp.PropertyName = "property";
+			prp.Expression = "expression";
+			prp.TypePrp = SolidWorks.Interop.swconst.swCustomInfoType_e.swCustomInfoText;
+
+			item.MainProperty.Add(prp);
+			item.MainProperty.Add(prp);
+			item2.MainProperty.Add(prp);
+			item2.MainProperty.Add(prp);
+
+			SwFileConfiguration cnf = new SwFileConfiguration();
+			cnf.ConfigurationName = "config1";
+			cnf.Properties.Add(prp);
+			cnf.Properties.Add(prp);
+
+			item.swFileConfigurations = new List<SwFileConfiguration>() { cnf, cnf, cnf };
+			item2.swFileConfigurations = new List<SwFileConfiguration>() { cnf, cnf, cnf };
+			_fileItems = new List<SwFileItem>() { item, item2, item, item2 };
 		}
 
 		public ICommand ImoprtPorperties { get; set; }

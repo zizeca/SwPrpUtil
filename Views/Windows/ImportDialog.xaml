@@ -31,14 +31,9 @@
 		</StackPanel>
 		<TreeView x:Name="treeView" Grid.Column="1" ItemsSource="{Binding Path=FileItems}">
 			<TreeView.ItemTemplate>
-				<HierarchicalDataTemplate DataType="{x:Type model:SwFileItem}" ItemsSource="{Binding Path=swFileConfigurations}">
+				<DataTemplate>
 					<TextBlock Text="{Binding Path=FileName}" />
-					<HierarchicalDataTemplate.ItemTemplate>
-						<HierarchicalDataTemplate DataType="{x:Type model:SwFileItem}" ItemsSource="{Binding FilePath}">
-							<TextBlock Text="{Binding Path=FilePath}" />
-						</HierarchicalDataTemplate>
-					</HierarchicalDataTemplate.ItemTemplate>
-				</HierarchicalDataTemplate>
+				</DataTemplate>
 			</TreeView.ItemTemplate>
 		</TreeView>
 	</Grid>
