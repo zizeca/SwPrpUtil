@@ -96,8 +96,10 @@
     <Compile Include="Infrastructure\Commands\Deprecated\TaskUtilities.cs" />
     <Compile Include="Infrastructure\Commands\RelayCommand.cs" />
     <Compile Include="Infrastructure\Commands\SldWorksRunTestCommand.cs" />
+    <Compile Include="Infrastructure\FolderItem.cs" />
     <Compile Include="Infrastructure\ObservableObject.cs" />
     <Compile Include="Infrastructure\PropertyTypeConverter.cs" />
+    <Compile Include="Infrastructure\SimpleFolderConverter.cs" />
     <Compile Include="Models\SwFileConfiguration.cs" />
     <Compile Include="Models\SwFileItem.cs" />
     <Compile Include="Models\SwFileSummaryInfo.cs" />

@@ -20,6 +20,28 @@
 			</ObjectDataProvider.MethodParameters>
 		</ObjectDataProvider>
 		<inf:PropertyTypeConverter x:Key="PropertyTypeConverter" />
+
+		<inf:SimpleFolderConverter x:Key="FolderConverter" />
+		<HierarchicalDataTemplate DataType="{x:Type model:SwFileItem}">
+			<HierarchicalDataTemplate.ItemsSource>
+				<MultiBinding Converter="{StaticResource FolderConverter}" ConverterParameter="Main property, Configurationproperties">
+					<Binding Path="MainProperty" />
+					<Binding Path="swFileConfigurations" />
+				</MultiBinding>
+			</HierarchicalDataTemplate.ItemsSource>
+			<TextBlock Text="{Binding Path=FileName}" />
+		</HierarchicalDataTemplate>
+		<HierarchicalDataTemplate DataType="{x:Type model:SwFileConfiguration}">
+			<HierarchicalDataTemplate.ItemsSource>
+				<MultiBinding Converter="{StaticResource FolderConverter}" ConverterParameter="">
+					<Binding Path="Properties" />
+				</MultiBinding>
+			</HierarchicalDataTemplate.ItemsSource>
+			<TextBlock Text="{Binding Path=ConfigurationName}" />
+		</HierarchicalDataTemplate>
+		<HierarchicalDataTemplate DataType="{x:Type inf:FolderItem}" ItemsSource="{Binding Path=Items}">
+			<TextBlock Text="{Binding Path=Name}" />
+		</HierarchicalDataTemplate>
 	</Window.Resources>
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -29,12 +51,6 @@
 		<StackPanel>
 			<Button Content="Import" Command="{Binding Path=ImoprtPorperties}" />
 		</StackPanel>
-		<TreeView x:Name="treeView" Grid.Column="1" ItemsSource="{Binding Path=FileItems}">
-			<TreeView.ItemTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding Path=FileName}" />
-				</DataTemplate>
-			</TreeView.ItemTemplate>
-		</TreeView>
+		<TreeView Grid.Column="1" ItemsSource="{Binding Path=FileItems}" />
 	</Grid>
 </Window>
