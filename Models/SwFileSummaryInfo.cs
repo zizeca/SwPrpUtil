@@ -1,34 +1,35 @@
 ﻿using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SwPrpUtil.Models
 {
-	class SwFileSummaryInfo
+	internal class SwFileSummaryInfo
 	{
 		public SwFileSummaryInfo()
 		{
 		}
 
-		public bool ReadSummaryInfo(ModelDoc2 doc)
+		public SwFileSummaryInfo(ModelDoc2 doc)
+		{
+			ReadSummaryInfo(doc);
+		}
+
+		public void ReadSummaryInfo(ModelDoc2 doc)
 		{
 			if (doc == null) throw new ArgumentException(nameof(doc));
 
-			SwSumInfoAuthor		= doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoAuthor];
-			SwSumInfoComment	= doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoComment];
+			SwSumInfoAuthor = doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoAuthor];
+			SwSumInfoComment = doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoComment];
 			SwSumInfoCreateDate = doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoCreateDate];
 			SwSumInfoCreateDate2 = doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoCreateDate2];
-			SwSumInfoKeywords	= doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoKeywords];
-			SwSumInfoSaveDate	= doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoSaveDate];
-			SwSumInfoSaveDate2	= doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoSaveDate2];
-			SwSumInfoSavedBy	= doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoSavedBy];
-			SwSumInfoSubject	= doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoSubject];
-			SwSumInfoTitle		= doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoTitle];
-			return true;
+			SwSumInfoKeywords = doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoKeywords];
+			SwSumInfoSaveDate = doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoSaveDate];
+			SwSumInfoSaveDate2 = doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoSaveDate2];
+			SwSumInfoSavedBy = doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoSavedBy];
+			SwSumInfoSubject = doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoSubject];
+			SwSumInfoTitle = doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoTitle];
+			//return true;
 		}
 
 		public string SwSumInfoAuthor { get; set; }
@@ -41,6 +42,5 @@ namespace SwPrpUtil.Models
 		public string SwSumInfoSavedBy { get; set; }
 		public string SwSumInfoSubject { get; set; }
 		public string SwSumInfoTitle { get; set; }
-
 	}
 }

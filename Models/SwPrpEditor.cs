@@ -252,6 +252,7 @@ namespace SwPrpUtil.Models
 
 			file.FilePath = pathToFile;
 			file.MainProperty = GetSwProperties(ref doc, "");
+			file.SummaryInfo = new SwFileSummaryInfo(doc);
 
 			foreach (string configuration in configNames)
 			{
