@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace SwPrpUtil.Models
@@ -17,6 +13,8 @@ namespace SwPrpUtil.Models
 
 		public string FileName { get; private set; }
 
+		public string FileNameWithoutExtension { get; private set; }
+
 		public string FilePath
 		{
 			get => _filePath;
@@ -25,6 +23,7 @@ namespace SwPrpUtil.Models
 				_filePath = value;
 				Extension = Path.GetExtension(_filePath);
 				FileName = Path.GetFileName(_filePath);
+				FileNameWithoutExtension = Path.GetFileNameWithoutExtension(_filePath);
 			}
 		}
 
