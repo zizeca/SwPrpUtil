@@ -67,6 +67,8 @@ namespace SwPrpUtil.Models
 
 			foreach (string path in pathes)
 			{
+				if (string.IsNullOrEmpty(path) || path.Contains(@"~$")) continue;
+
 				string extension = Path.GetExtension(path)?.ToLower();
 				if (extension == ".sldprt" || extension == ".sldasm" || extension == ".slddrw")
 				{
