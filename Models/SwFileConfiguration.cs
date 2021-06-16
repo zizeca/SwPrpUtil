@@ -12,7 +12,7 @@ namespace SwPrpUtil.Models
 
 		public string ConfigurationName { get; set; }
 
-		public List<SwProperty> Properties;
+		public List<SwProperty> Properties { get; set; }
 
 		public SwFileConfiguration(string configurationName, List<SwProperty> properties, SwFileConfiguration baseFileConfiguration = null)
 		{
