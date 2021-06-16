@@ -48,7 +48,7 @@ namespace SwPrpUtil.ViewModels
 						break;
 				}
 			};
-
+			/*
 			//test code
 			SwFileItem item = new SwFileItem();
 			SwFileItem item2 = new SwFileItem();
@@ -76,6 +76,7 @@ namespace SwPrpUtil.ViewModels
 			item.swFileConfigurations = new List<SwFileConfiguration>() { cnf, cnf, cnf };
 			item2.swFileConfigurations = new List<SwFileConfiguration>() { cnf, cnf, cnf };
 			_fileItems = new List<SwFileItem>() { item, item2, item, item2 };
+			*/
 		}
 
 		public ICommand ImoprtPorperties { get; set; }

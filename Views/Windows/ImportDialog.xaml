@@ -33,11 +33,15 @@
 		</HierarchicalDataTemplate>
 		<HierarchicalDataTemplate DataType="{x:Type model:SwFileConfiguration}">
 			<HierarchicalDataTemplate.ItemsSource>
-				<MultiBinding Converter="{StaticResource FolderConverter}" ConverterParameter="">
-					<Binding Path="Properties" />
-				</MultiBinding>
+				<Binding Path="Properties" />
 			</HierarchicalDataTemplate.ItemsSource>
 			<TextBlock Text="{Binding Path=ConfigurationName}" />
+		</HierarchicalDataTemplate>
+		<HierarchicalDataTemplate DataType="{x:Type model:SwProperty}">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding Path=PropertyName}"/>
+				<TextBlock Text="{Binding Path=Expression}"/>
+			</StackPanel>
 		</HierarchicalDataTemplate>
 		<HierarchicalDataTemplate DataType="{x:Type inf:FolderItem}" ItemsSource="{Binding Path=Items}">
 			<TextBlock Text="{Binding Path=Name}" />
