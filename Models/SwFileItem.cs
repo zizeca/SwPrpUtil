@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using SolidWorks.Interop.sldworks;
+using SolidWorks.Interop.swconst;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace SwPrpUtil.Models
 {
@@ -32,17 +37,85 @@ namespace SwPrpUtil.Models
 		public SwFileSummaryInfo SummaryInfo { get; set; }
 
 		// Main custom property
-		public List<SwProperty> MainProperty { get; set; }
+		//public List<SwProperty> MainProperty { get; set; }
+		public SwFileConfiguration MainProperty { get; set; }
 
 		//Configurations with self properties
-		public List<SwFileConfiguration> swFileConfigurations { get; set; }
+		public List<SwFileConfiguration> SwFileConfigurations { get; set; }
 
 		public SwFileItem()
 		{
-			FilePath = string.Empty;
-			SummaryInfo = new SwFileSummaryInfo();
-			MainProperty = new List<SwProperty>();
-			swFileConfigurations = new List<SwFileConfiguration>();
+		}
+		public SwFileItem(ModelDoc2 doc)
+		{
+			ReadFromDoc(doc);
+		}
+
+		public void ReadFromDoc(ModelDoc2 doc)
+		{
+			if (doc == null)
+			{
+				throw new ArgumentNullException(nameof(doc));
+			}
+
+			string[] configNames = (string[])doc.GetConfigurationNames();
+
+			if (configNames == null || configNames.Count() == 0)
+				throw new Exception("Configuration get exception");
+
+
+
+			FilePath = doc.GetPathName();
+			MainProperty = new SwFileConfiguration("Main Properties", GetSwProperties(ref doc));
+			SummaryInfo = new SwFileSummaryInfo(doc);
+
+			SwFileConfigurations = new List<SwFileConfiguration>();
+			foreach (string configName in configNames)
+			{
+				SwFileConfiguration fc = new SwFileConfiguration(configName, GetSwProperties(ref doc, configName));
+				SwFileConfigurations.Add(fc);
+			}
+
+		}
+
+		public static List<SwProperty> GetSwProperties(ref ModelDoc2 doc, string configName = "")
+		{
+			if (doc == null)
+				throw new ArgumentNullException(nameof(doc));
+
+			List<SwProperty> retList = new List<SwProperty>();
+
+			CustomPropertyManager manager = doc.Extension.CustomPropertyManager[configName];
+
+			object PropNames = null;
+			object PropTypes = null;
+			object PropValues = null;
+			object Resolved = null;
+			object PropLink = null;
+			int PropCount = 0;
+
+			PropCount = manager.GetAll3(ref PropNames, ref PropTypes, ref PropValues, ref Resolved, ref PropLink);
+
+			try
+			{
+				Debug.WriteLine(string.Format("Found {0} properties", PropCount));
+				for (int i = 0; i < PropCount; i++)
+				{
+					SwProperty prp = new SwProperty
+					{
+						PropertyName = ((string[])PropNames)[i],
+						TypePrp = (swCustomInfoType_e)((int[])PropTypes)[i],
+						Expression = ((string[])PropValues)[i]
+					};
+					Debug.WriteLine(string.Format("Add prp: {0}|{1}|{2}", prp.PropertyName, prp.TypePrp.ToString(), prp.Expression));
+					retList.Add(prp);
+				}
+			}
+			catch (Exception e)
+			{
+				Debug.WriteLine(string.Format("Catch exception {0}", e.Message));
+			}
+			return retList;
 		}
 	}
 }
