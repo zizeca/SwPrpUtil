@@ -8,22 +8,22 @@ namespace SwPrpUtil.Models
 {
 	internal class SwFileConfiguration
 	{
-		public SwFileConfiguration BaseFileConfiguration;
+		//public SwFileConfiguration BaseFileConfiguration { get; set; }
+
+		//public List<SwFileConfiguration> Children { get; set; }
 
 		public string ConfigurationName { get; set; }
 
 		public List<SwProperty> Properties { get; set; }
 
-		public SwFileConfiguration(string configurationName, List<SwProperty> properties, SwFileConfiguration baseFileConfiguration = null)
+		public SwFileConfiguration(string configurationName, List<SwProperty> properties)
 		{
-			BaseFileConfiguration = baseFileConfiguration;
 			ConfigurationName = configurationName;
 			Properties = properties;
 		}
 
 		public SwFileConfiguration()
 		{
-			BaseFileConfiguration = null;
 			ConfigurationName = "";
 			Properties = new List<SwProperty>();
 		}
