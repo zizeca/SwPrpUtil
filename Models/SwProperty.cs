@@ -27,6 +27,13 @@ namespace SwPrpUtil.Models
 			Expression = string.Empty;
 		}
 
+		public SwProperty(string propertyName, swCustomInfoType_e typePrp, string expression)
+		{
+			PropertyName = propertyName;
+			TypePrp = typePrp;
+			Expression = expression;
+		}
+
 		public string PropertyName { get; set; }
 
 		public swCustomInfoType_e TypePrp { get; set; }
