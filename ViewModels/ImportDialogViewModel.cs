@@ -48,35 +48,36 @@ namespace SwPrpUtil.ViewModels
 						break;
 				}
 			};
-			/*
+			///*
 			//test code
 			SwFileItem item = new SwFileItem();
 			SwFileItem item2 = new SwFileItem();
 
 			item.FilePath = @"D:\1.Сurrent_work\vinnik\0712-01-01-001.sldprt";
 			item2.FilePath = @"D:\1.Сurrent_work\vinnik\0712-01-01-002.sldprt";
-			item.MainProperty = new List<SwProperty>();
-			item2.MainProperty = new List<SwProperty>();
 
 			SwProperty prp = new SwProperty();
 			prp.PropertyName = "property";
 			prp.Expression = "expression";
 			prp.TypePrp = SolidWorks.Interop.swconst.swCustomInfoType_e.swCustomInfoText;
 
-			item.MainProperty.Add(prp);
-			item.MainProperty.Add(prp);
-			item2.MainProperty.Add(prp);
-			item2.MainProperty.Add(prp);
+			SwProperty prp1 = new SwProperty();
+			prp.PropertyName = "property1";
+			prp.Expression = "expression1";
+			prp.TypePrp = SolidWorks.Interop.swconst.swCustomInfoType_e.swCustomInfoText;
 
-			SwFileConfiguration cnf = new SwFileConfiguration();
-			cnf.ConfigurationName = "config1";
-			cnf.Properties.Add(prp);
-			cnf.Properties.Add(prp);
 
-			item.swFileConfigurations = new List<SwFileConfiguration>() { cnf, cnf, cnf };
-			item2.swFileConfigurations = new List<SwFileConfiguration>() { cnf, cnf, cnf };
-			_fileItems = new List<SwFileItem>() { item, item2, item, item2 };
-			*/
+			item.MainProperty = new SwFileConfiguration("Main properties", new List<SwProperty>() { prp, prp1, prp });
+			item2.MainProperty = new SwFileConfiguration("Main properties", new List<SwProperty>() { prp, prp1, prp });
+
+			SwFileConfiguration cnf1 = new SwFileConfiguration("Config 1", new List<SwProperty>() { prp, prp1, prp });
+			SwFileConfiguration cnf2 = new SwFileConfiguration("Config 2", new List<SwProperty>() { prp, prp1, prp });
+			SwFileConfiguration cnf3 = new SwFileConfiguration("Config 3", new List<SwProperty>() { prp, prp1, prp });
+
+			item.SwFileConfigurations = new List<SwFileConfiguration>() { cnf1, cnf2, cnf3 };
+			item2.SwFileConfigurations = new List<SwFileConfiguration>() { cnf1, cnf2, cnf3 };
+			_fileItems = new List<SwFileItem>() { item, item2 };
+			//*/
 		}
 
 		public ICommand ImoprtPorperties { get; set; }
@@ -87,7 +88,7 @@ namespace SwPrpUtil.ViewModels
 			dialog.ShowDialog();
 			string path = dialog.FileName;
 
-			_ = await _editor.ImportSourceFile(path);
+			_ = await _editor.ImportFileProperties(path);
 			FileItems = _editor.SourceFiles;
 		}
 	}
