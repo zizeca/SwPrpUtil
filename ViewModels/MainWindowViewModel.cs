@@ -139,7 +139,7 @@ namespace SwPrpUtil.ViewModels
 			dialog.ShowDialog();
 			string path = dialog.FileName;
 
-			_ = await _editor.ImportPropertiesFromFile(path);
+			_ = await _editor.ImportFileProperties(path);
 			OnPropertyChanged(nameof(StatusText));
 		}
 

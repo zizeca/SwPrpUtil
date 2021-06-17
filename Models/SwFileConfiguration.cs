@@ -24,8 +24,6 @@ namespace SwPrpUtil.Models
 
 		public SwFileConfiguration()
 		{
-			ConfigurationName = "";
-			Properties = new List<SwProperty>();
 		}
 	}
 }

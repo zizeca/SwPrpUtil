@@ -24,9 +24,9 @@
 		<inf:SimpleFolderConverter x:Key="FolderConverter" />
 		<HierarchicalDataTemplate DataType="{x:Type model:SwFileItem}">
 			<HierarchicalDataTemplate.ItemsSource>
-				<MultiBinding Converter="{StaticResource FolderConverter}" ConverterParameter="Main property, Configurationproperties">
+				<MultiBinding Converter="{StaticResource FolderConverter}" ConverterParameter=", Configurationproperties">
 					<Binding Path="MainProperty" />
-					<Binding Path="swFileConfigurations" />
+					<Binding Path="SwFileConfigurations" />
 				</MultiBinding>
 			</HierarchicalDataTemplate.ItemsSource>
 			<TextBlock Text="{Binding Path=FileName}" />
@@ -40,6 +40,7 @@
 		<HierarchicalDataTemplate DataType="{x:Type model:SwProperty}">
 			<StackPanel Orientation="Horizontal">
 				<TextBlock Text="{Binding Path=PropertyName}"/>
+				<TextBlock Text=" = "/>
 				<TextBlock Text="{Binding Path=Expression}"/>
 			</StackPanel>
 		</HierarchicalDataTemplate>
