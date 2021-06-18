@@ -16,12 +16,17 @@
 		<vm:MainWindowViewModel />
 	</Window.DataContext>
 	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\Dictionaries\Dictionary1.xaml"	/>
+			</ResourceDictionary.MergedDictionaries>
 		<ObjectDataProvider x:Key="typeEnum" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
 			<ObjectDataProvider.MethodParameters>
 				<x:Type Type="inf:PrpType" />
 			</ObjectDataProvider.MethodParameters>
 		</ObjectDataProvider>
 		<inf:PropertyTypeConverter x:Key="PropertyTypeConverter" />
+		</ResourceDictionary>
 	</Window.Resources>
 
 	<DockPanel>
@@ -100,6 +105,7 @@
 					</Grid>
 
 					<GroupBox Header="Properties" Grid.Column="0" Grid.Row="1">
+						<!--
 						<DataGrid  ItemsSource="{Binding Path=SourceProperties, Mode=TwoWay}" CanUserAddRows="True" AutoGenerateColumns="False" IsReadOnly="False">
 							<DataGrid.Columns>
 
@@ -119,6 +125,10 @@
 								Binding="{Binding Path=Expression}"
 								Width="*" />
 							</DataGrid.Columns>
+						</DataGrid>
+						-->
+						<DataGrid>
+							<DataTemplate  ></DataTemplate>
 						</DataGrid>
 					</GroupBox>
 					<GridSplitter Grid.Column="1" Grid.RowSpan="2" Width="5" HorizontalAlignment="Stretch" Foreground="#FF2A21D6" Background="#FFC3DCEE" />

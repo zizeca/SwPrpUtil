@@ -1,7 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:inf="clr-namespace:SwPrpUtil.Infrastructure"
-					xmlns:core="clr-namespace:System;assembly=mscorlib">
+					xmlns:core="clr-namespace:System;assembly=mscorlib"
+					xmlns:vm="clr-namespace:SwPrpUtil.ViewModels"
+					xmlns:model="clr-namespace:SwPrpUtil.Models">
 
 	<ObjectDataProvider x:Key="typeEnum" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
 		<ObjectDataProvider.MethodParameters>
@@ -9,7 +11,7 @@
 		</ObjectDataProvider.MethodParameters>
 	</ObjectDataProvider>
 	<inf:PropertyTypeConverter x:Key="PropertyTypeConverter" />
-	<DataGrid x:Key="PropertiesTable" >
+	<DataGrid x:Key="PropertiesTable">
 		<DataGrid.Columns >
 
 			<DataGridTextColumn
@@ -29,4 +31,27 @@
 								Width="*" />
 		</DataGrid.Columns>
 	</DataGrid>
+
+	<DataTemplate x:Key="DataProperty" DataType="{x:Type model:SwProperty}">
+		<DataGrid>
+			<DataGrid.Columns >
+
+				<DataGridTextColumn
+								Header="Poperty Name"
+								Binding="{Binding Path=PropertyName}"
+								Width="auto" />
+
+				<DataGridComboBoxColumn
+								Header="Type"
+								SelectedItemBinding="{Binding Path=TypePrp, Converter={StaticResource PropertyTypeConverter}}"
+								ItemsSource="{Binding Source={StaticResource typeEnum}}"
+								MinWidth="80" />
+
+				<DataGridTextColumn
+								Header="Value / Text expression"
+								Binding="{Binding Path=Expression}"
+								Width="*" />
+			</DataGrid.Columns>
+		</DataGrid>
+	</DataTemplate>
 </ResourceDictionary>

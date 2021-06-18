@@ -31,18 +31,42 @@
 			</HierarchicalDataTemplate.ItemsSource>
 			<TextBlock Text="{Binding Path=FileName}" />
 		</HierarchicalDataTemplate>
+
+		<!--
 		<HierarchicalDataTemplate DataType="{x:Type model:SwFileConfiguration}">
 			<HierarchicalDataTemplate.ItemsSource>
 				<Binding Path="Properties" />
 			</HierarchicalDataTemplate.ItemsSource>
 			<TextBlock Text="{Binding Path=ConfigurationName}" />
-		</HierarchicalDataTemplate>
-		<HierarchicalDataTemplate DataType="{x:Type model:SwProperty}">
-			<StackPanel Orientation="Horizontal">
-				<TextBlock Text="{Binding Path=PropertyName}"/>
-				<TextBlock Text=" = "/>
-				<TextBlock Text="{Binding Path=Expression}"/>
-			</StackPanel>
+		</HierarchicalDataTemplate> -->
+		<HierarchicalDataTemplate DataType="{x:Type model:SwFileConfiguration}">
+			<TextBlock Text="{Binding Path=ConfigurationName}"/>
+			<!--
+			<Expander Header="{Binding Path=ConfigurationName}">
+				
+			<DataGrid Width="400" ItemsSource="{Binding Path=Properties, Mode=TwoWay}" CanUserAddRows="False" AutoGenerateColumns="False" IsReadOnly="True">
+				<DataGrid.Columns>
+
+					<DataGridTextColumn
+								Header="Poperty Name"
+								Binding="{Binding Path=PropertyName}"
+								Width="auto" />
+
+					<DataGridComboBoxColumn
+								Header="Type"
+								SelectedItemBinding="{Binding Path=TypePrp, Converter={StaticResource PropertyTypeConverter}}"
+								ItemsSource="{Binding Source={StaticResource typeEnum}}"
+								MinWidth="80" />
+
+					<DataGridTextColumn
+								Header="Value / Text expression"
+								Binding="{Binding Path=Expression}"
+								Width="*" />
+				</DataGrid.Columns>
+			</DataGrid>
+					
+			</Expander>
+			-->
 		</HierarchicalDataTemplate>
 		<HierarchicalDataTemplate DataType="{x:Type inf:FolderItem}" ItemsSource="{Binding Path=Items}">
 			<TextBlock Text="{Binding Path=Name}" />

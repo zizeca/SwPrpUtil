@@ -62,9 +62,9 @@ namespace SwPrpUtil.ViewModels
 			prp.TypePrp = SolidWorks.Interop.swconst.swCustomInfoType_e.swCustomInfoText;
 
 			SwProperty prp1 = new SwProperty();
-			prp.PropertyName = "property1";
-			prp.Expression = "expression1";
-			prp.TypePrp = SolidWorks.Interop.swconst.swCustomInfoType_e.swCustomInfoText;
+			prp1.PropertyName = "property1";
+			prp1.Expression = "expression1";
+			prp1.TypePrp = SolidWorks.Interop.swconst.swCustomInfoType_e.swCustomInfoText;
 
 
 			item.MainProperty = new SwFileConfiguration("Main properties", new List<SwProperty>() { prp, prp1, prp });

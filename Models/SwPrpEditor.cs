@@ -83,11 +83,6 @@ namespace SwPrpUtil.Models
 
 		public async Task<bool> ImportFileProperties(string pathToFile)
 		{
-			//Run solidworks ( or get exist solidworks object)
-			//Open file in solidworks
-			//read configName properties
-			//add properties to _swSourceProperties
-
 
 			if (string.IsNullOrEmpty(pathToFile) || !File.Exists(pathToFile))
 				throw new ArgumentException(nameof(pathToFile));
@@ -145,8 +140,7 @@ namespace SwPrpUtil.Models
 
 			try
 			{
-				SwFileItem file = new SwFileItem(doc);
-				_sourceFiles.Add(file);
+				_sourceFiles.Add(new SwFileItem(doc));
 			}
 			catch (Exception e)
 			{
