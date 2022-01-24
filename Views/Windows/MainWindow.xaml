@@ -8,6 +8,7 @@
 		xmlns:inf="clr-namespace:SwPrpUtil.Infrastructure"
 		xmlns:vm="clr-namespace:SwPrpUtil.ViewModels"
         xmlns:l="clr-namespace:SwPrpUtil"
+        xmlns:model="clr-namespace:SwPrpUtil.Models"
         mc:Ignorable="d"
         Title="{Binding Path=Title}"
 		Height="450" Width="800" WindowStartupLocation="CenterScreen">
@@ -105,7 +106,7 @@
 					</Grid>
 
 					<GroupBox Header="Properties" Grid.Column="0" Grid.Row="1">
-						<!--
+						<!-- -->
 						<DataGrid  ItemsSource="{Binding Path=SourceProperties, Mode=TwoWay}" CanUserAddRows="True" AutoGenerateColumns="False" IsReadOnly="False">
 							<DataGrid.Columns>
 
@@ -126,10 +127,12 @@
 								Width="*" />
 							</DataGrid.Columns>
 						</DataGrid>
+						<!--
+                        <DataGrid ItemsSource="{Binding Source={StaticResource DataProperty}}" >
+                            
+                        </DataGrid>
+                        
 						-->
-						<DataGrid>
-							<DataTemplate  ></DataTemplate>
-						</DataGrid>
 					</GroupBox>
 					<GridSplitter Grid.Column="1" Grid.RowSpan="2" Width="5" HorizontalAlignment="Stretch" Foreground="#FF2A21D6" Background="#FFC3DCEE" />
 					<GroupBox Header="Files" Grid.Column="3" Grid.Row="1">

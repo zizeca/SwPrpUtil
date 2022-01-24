@@ -14,7 +14,11 @@
 		<vm:ImportDialogViewModel />
 	</Window.DataContext>
 	<Window.Resources>
-		<ObjectDataProvider x:Key="typeEnum" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Dictionaries\Dictionary1.xaml"	/>
+            </ResourceDictionary.MergedDictionaries>
+            <ObjectDataProvider x:Key="typeEnum" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
 			<ObjectDataProvider.MethodParameters>
 				<x:Type Type="inf:PrpType" />
 			</ObjectDataProvider.MethodParameters>
@@ -22,64 +26,56 @@
 		<inf:PropertyTypeConverter x:Key="PropertyTypeConverter" />
 
 		<inf:SimpleFolderConverter x:Key="FolderConverter" />
-		<HierarchicalDataTemplate DataType="{x:Type model:SwFileItem}">
-			<HierarchicalDataTemplate.ItemsSource>
-				<MultiBinding Converter="{StaticResource FolderConverter}" ConverterParameter=", Configurationproperties">
-					<Binding Path="MainProperty" />
-					<Binding Path="SwFileConfigurations" />
-				</MultiBinding>
-			</HierarchicalDataTemplate.ItemsSource>
-			<TextBlock Text="{Binding Path=FileName}" />
-		</HierarchicalDataTemplate>
+        <HierarchicalDataTemplate DataType="{x:Type model:SwFileItem}">
+            <HierarchicalDataTemplate.ItemsSource>
+                <MultiBinding Converter="{StaticResource FolderConverter}" ConverterParameter=", Configurationproperties">
+                    <Binding Path="MainProperty" />
+                    <Binding Path="SwFileConfigurations" />
+                </MultiBinding>
+            </HierarchicalDataTemplate.ItemsSource>
+            <TextBlock Text="{Binding Path=FileName}" />
+        </HierarchicalDataTemplate>
 
-		<!--
-		<HierarchicalDataTemplate DataType="{x:Type model:SwFileConfiguration}">
-			<HierarchicalDataTemplate.ItemsSource>
-				<Binding Path="Properties" />
-			</HierarchicalDataTemplate.ItemsSource>
-			<TextBlock Text="{Binding Path=ConfigurationName}" />
-		</HierarchicalDataTemplate> -->
-		<HierarchicalDataTemplate DataType="{x:Type model:SwFileConfiguration}">
+        <HierarchicalDataTemplate DataType="{x:Type model:SwFileConfiguration}">
 			<TextBlock Text="{Binding Path=ConfigurationName}"/>
-			<!--
-			<Expander Header="{Binding Path=ConfigurationName}">
-				
-			<DataGrid Width="400" ItemsSource="{Binding Path=Properties, Mode=TwoWay}" CanUserAddRows="False" AutoGenerateColumns="False" IsReadOnly="True">
-				<DataGrid.Columns>
 
-					<DataGridTextColumn
-								Header="Poperty Name"
-								Binding="{Binding Path=PropertyName}"
-								Width="auto" />
-
-					<DataGridComboBoxColumn
-								Header="Type"
-								SelectedItemBinding="{Binding Path=TypePrp, Converter={StaticResource PropertyTypeConverter}}"
-								ItemsSource="{Binding Source={StaticResource typeEnum}}"
-								MinWidth="80" />
-
-					<DataGridTextColumn
-								Header="Value / Text expression"
-								Binding="{Binding Path=Expression}"
-								Width="*" />
-				</DataGrid.Columns>
-			</DataGrid>
-					
-			</Expander>
-			-->
 		</HierarchicalDataTemplate>
 		<HierarchicalDataTemplate DataType="{x:Type inf:FolderItem}" ItemsSource="{Binding Path=Items}">
 			<TextBlock Text="{Binding Path=Name}" />
 		</HierarchicalDataTemplate>
-	</Window.Resources>
+        </ResourceDictionary>
+    </Window.Resources>
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="100" />
+			<ColumnDefinition />
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
 		<StackPanel>
 			<Button Content="Import" Command="{Binding Path=ImoprtPorperties}" />
 		</StackPanel>
-		<TreeView Grid.Column="1" ItemsSource="{Binding Path=FileItems}" />
-	</Grid>
+		<TreeView Grid.Column="1" ItemsSource="{Binding Path=FileItems}" x:Name="ConfigTree" />
+
+        <DataGrid Grid.Column="2" ItemsSource="{Binding ElementName=ConfigTree, Path=SelectedItem.Properties, Mode=OneWay}" AutoGenerateColumns="False" IsReadOnly="True" >
+            <DataGrid.Columns>
+
+                <DataGridTextColumn
+								Header="Poperty Name"
+								Binding="{Binding Path=PropertyName}"
+								Width="auto" />
+
+                <DataGridComboBoxColumn
+								Header="Type"
+								SelectedItemBinding="{Binding Path=TypePrp, Converter={StaticResource PropertyTypeConverter}}"
+								ItemsSource="{Binding Source={StaticResource typeEnum}}"
+								MinWidth="80" />
+
+                <DataGridTextColumn
+								Header="Value / Text expression"
+								Binding="{Binding Path=Expression}"
+								Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
 </Window>
