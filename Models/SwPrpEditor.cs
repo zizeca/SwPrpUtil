@@ -15,9 +15,12 @@ namespace SwPrpUtil.Models
 		private List<SwFileItem> _importedFiles;
 		public List<SwFileItem> ImportedFiles { get => _importedFiles; }
 
-		private List<SwFileItem> _sourceFiles = new List<SwFileItem>();
+		private List<SwFileItem> _sourceFiles;
 		public List<SwFileItem> SourceFiles { get => _sourceFiles; }
 
+		/// <summary>
+		/// Properties for modify and add to target files
+		/// </summary>
 		private List<SwProperty> _importedProperties;
 		public List<SwProperty> ImportedProperties { get => _importedProperties; }
 
@@ -32,12 +35,20 @@ namespace SwPrpUtil.Models
 			private set => Set(ref _statusMessage, value);
 		}
 
+		//ctor
 		public SwPrpEditor()
 		{
 			_importedProperties = new List<SwProperty>();
 			_importedFiles = new List<SwFileItem>();
+			_sourceFiles = new List<SwFileItem>();
 		}
 
+		/// <summary>
+		/// Get all files from direcory "pathToFolder" and run AddFiles method
+		/// </summary>
+		/// <param name="pathToFolder"> path to directory with SolidWorks files </param>
+		/// <returns> true if success to add files </returns>
+		/// <exception cref="DirectoryNotFoundException"></exception>
 		public bool AddFolder(string pathToFolder)
 		{
 			if (!Directory.Exists(pathToFolder))
@@ -55,6 +66,11 @@ namespace SwPrpUtil.Models
 			return true;
 		}
 
+		/// <summary>
+		/// Add files from list of pathes to _importedFiles
+		/// </summary>
+		/// <param name="pathes"></param>
+		/// <exception cref="ArgumentException"></exception>
 		public void AddFiles(string[] pathes)
 		{
 			if (pathes == null || pathes.Count() == 0)
@@ -80,7 +96,13 @@ namespace SwPrpUtil.Models
 			OnPropertyChanged(nameof(ImportedFiles));
 		}
 
-
+		/// <summary>
+		/// Read all properties from file and add file to _sourceFiles
+		/// </summary>
+		/// <param name="pathToFile"></param>
+		/// <returns></returns>
+		/// <exception cref="ArgumentException"></exception>
+		/// <exception cref="FileLoadException"></exception>
 		public async Task<bool> ImportFileProperties(string pathToFile)
 		{
 

@@ -6,15 +6,22 @@ namespace SwPrpUtil.Models
 {
 	internal class SwFileSummaryInfo
 	{
+		//ctor default
 		public SwFileSummaryInfo()
 		{
 		}
 
+		//ctor2
 		public SwFileSummaryInfo(ModelDoc2 doc)
 		{
 			ReadSummaryInfo(doc);
 		}
 
+		/// <summary>
+		/// Read summary information from solidworks document
+		/// </summary>
+		/// <param name="doc">Opende solidworks document</param>
+		/// <exception cref="ArgumentException"></exception>
 		public void ReadSummaryInfo(ModelDoc2 doc)
 		{
 			if (doc == null) throw new ArgumentException(nameof(doc));

@@ -20,6 +20,7 @@ namespace SwPrpUtil.Models
 			}
 		}
 
+		//Private ctor. Singleton pattern
 		private SwHolder()
 		{
 		}

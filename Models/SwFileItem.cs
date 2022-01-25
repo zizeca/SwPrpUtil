@@ -10,7 +10,8 @@ namespace SwPrpUtil.Models
 {
 	internal class SwFileItem
 	{
-		#region Path_properies
+
+		#region Path_properies 
 
 		private string _filePath;
 
@@ -20,6 +21,10 @@ namespace SwPrpUtil.Models
 
 		public string FileNameWithoutExtension { get; private set; }
 
+		/// <summary>
+		/// File path fill other info of path to file/
+		/// No check extension and type of file
+		/// </summary>
 		public string FilePath
 		{
 			get => _filePath;
@@ -32,9 +37,11 @@ namespace SwPrpUtil.Models
 			}
 		}
 
-		#endregion Path_properies
+        #endregion Path_properies
 
-		public SwFileSummaryInfo SummaryInfo { get; set; }
+        #region InfoSwFile
+
+        public SwFileSummaryInfo SummaryInfo { get; set; }
 
 		// Main custom property
 		//public List<SwProperty> MainProperty { get; set; }
@@ -43,14 +50,36 @@ namespace SwPrpUtil.Models
 		//Configurations with self properties
 		public List<SwFileConfiguration> SwFileConfigurations { get; set; }
 
-		public SwFileItem()
+        #endregion
+
+        #region Ctors
+
+        public SwFileItem()
 		{
+			this.SummaryInfo = null;
+			this.MainProperty = null;
+			this.SwFileConfigurations = null;
 		}
+
+		public SwFileItem(string path)
+        {
+			this.FilePath = path;
+        }
+
+
 		public SwFileItem(ModelDoc2 doc)
 		{
 			ReadFromDoc(doc);
 		}
 
+		#endregion Ctors
+
+		/// <summary>
+		/// Read all information from opened solidwroks document
+		/// </summary>
+		/// <param name="doc">Opened document in solidworks application</param>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <exception cref="Exception"></exception>
 		public void ReadFromDoc(ModelDoc2 doc)
 		{
 			if (doc == null)
@@ -78,6 +107,13 @@ namespace SwPrpUtil.Models
 
 		}
 
+		/// <summary>
+		/// Get properties from solidworks document
+		/// </summary>
+		/// <param name="doc">Opened document in solidworks application</param>
+		/// <param name="configName">configuration name. If name if "" return Main properties</param>
+		/// <returns>List of properties</returns>
+		/// <exception cref="ArgumentNullException"></exception>
 		public static List<SwProperty> GetSwProperties(ref ModelDoc2 doc, string configName = "")
 		{
 			if (doc == null)
