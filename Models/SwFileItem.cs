@@ -60,8 +60,6 @@ namespace SwPrpUtil.Models
 
             FilePath = doc.GetPathName();
             FileProperties = new SwFileProperty(doc);
-
-            throw new NotImplementedException();
         }
 
         #endregion Ctors
