@@ -10,194 +10,217 @@ using System.Threading.Tasks;
 
 namespace SwPrpUtil.Models
 {
-	internal class SwPrpEditor : ObservableObject
-	{
-		private List<SwFileItem> _importedFiles;
-		public List<SwFileItem> ImportedFiles { get => _importedFiles; }
+    internal class SwPrpEditor : ObservableObject
+    {
+        private List<SwFileItem> _targetFiles;
+        public List<SwFileItem> TargetFiles { get => _targetFiles; }
 
-		private List<SwFileItem> _sourceFiles;
-		public List<SwFileItem> SourceFiles { get => _sourceFiles; }
+        private List<SwFileItem> _sourceFiles;
+        public List<SwFileItem> SourceFiles { get => _sourceFiles; }
 
-		/// <summary>
-		/// Properties for modify and add to target files
-		/// </summary>
-		private List<SwProperty> _importedProperties;
-		public List<SwProperty> ImportedProperties { get => _importedProperties; }
+        /// <summary>
+        /// Properties for modify and add to target files
+        /// </summary>
+        private List<SwProperty> _targetProperties;
 
-		private string _statusMessage = "Ready";
+        public List<SwProperty> TargetProperties { get => _targetProperties; }
 
-		/// <summary>
-		/// Status of state SwPrpEditor
-		/// </summary>
-		public string StatusMessage
-		{
-			get => _statusMessage;
-			private set => Set(ref _statusMessage, value);
-		}
+        private string _statusMessage = "Ready";
 
-		//ctor
-		public SwPrpEditor()
-		{
-			_importedProperties = new List<SwProperty>();
-			_importedFiles = new List<SwFileItem>();
-			_sourceFiles = new List<SwFileItem>();
-		}
+        /// <summary>
+        /// Status of state SwPrpEditor
+        /// </summary>
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            private set => Set(ref _statusMessage, value);
+        }
 
-		/// <summary>
-		/// Get all files from direcory "pathToFolder" and run AddFiles method
-		/// </summary>
-		/// <param name="pathToFolder"> path to directory with SolidWorks files </param>
-		/// <returns> true if success to add files </returns>
-		/// <exception cref="DirectoryNotFoundException"></exception>
-		public bool AddFolder(string pathToFolder)
-		{
-			if (!Directory.Exists(pathToFolder))
-				throw new DirectoryNotFoundException(pathToFolder);
+        //ctor
+        public SwPrpEditor()
+        {
+            _targetProperties = new List<SwProperty>();
+            _targetFiles = new List<SwFileItem>();
+            _sourceFiles = new List<SwFileItem>();
+        }
 
-			string[] files = Directory.GetFiles(pathToFolder);
-			if (files.Length == 0)
-			{
-				Debug.WriteLine(string.Format("Directory {0} has not files", pathToFolder));
-				return false;
-			}
+        /// <summary>
+        /// Get all files from direcory "pathToFolder" and run AddFiles method
+        /// </summary>
+        /// <param name="pathToFolder"> path to directory with SolidWorks files </param>
+        /// <returns> true if success to add files </returns>
+        /// <exception cref="DirectoryNotFoundException"></exception>
+        public bool AddFolder(string pathToFolder)
+        {
+            if (!Directory.Exists(pathToFolder))
+                throw new DirectoryNotFoundException(pathToFolder);
 
-			AddFiles(files);
+            string[] files = Directory.GetFiles(pathToFolder);
+            if (files.Length == 0)
+            {
+                Debug.WriteLine(string.Format("Directory {0} has not files", pathToFolder));
+                return false;
+            }
 
-			return true;
-		}
+            AddFiles(files);
 
-		/// <summary>
-		/// Add files from list of pathes to _importedFiles
-		/// </summary>
-		/// <param name="pathes"></param>
-		/// <exception cref="ArgumentException"></exception>
-		public void AddFiles(string[] pathes)
-		{
-			if (pathes == null || pathes.Count() == 0)
-				throw new ArgumentException(nameof(pathes));
+            return true;
+        }
 
-			foreach (string path in pathes)
-			{
-				if (string.IsNullOrEmpty(path) || path.Contains(@"~$")) continue;
+        /// <summary>
+        /// Create SwFileItem and add to _targetFiles
+        /// </summary>
+        /// <param name="files"> pathes to solidworks files</param>
+        public void AddTargetFiles(IEnumerable<string> files)
+        {
+            foreach (string file in files)
+            {
+                if (string.IsNullOrEmpty(file) && !File.Exists(file)) continue;
 
-				string extension = Path.GetExtension(path)?.ToLower();
-				if (extension == ".sldprt" || extension == ".sldasm" || extension == ".slddrw")
-				{
-					SwFileItem fileItem = new SwFileItem();
-					fileItem.FilePath = path;
-					_importedFiles.Add(fileItem);
-				}
-				else
-				{
-					Debug.WriteLine(string.Format("Ignoring file {0}", path));
-				}
-			}
+                //ignore no solidworks files
+                string ext = Path.GetExtension(file).ToLower();
+                if (!(ext == ".sldptr" || ext == ".sldasm" || ext == ".slddrw")) continue;
 
-			OnPropertyChanged(nameof(ImportedFiles));
-		}
+                if (_targetFiles == null)
+                    _targetFiles = new List<SwFileItem>();
 
-		/// <summary>
-		/// Read all properties from file and add file to _sourceFiles
-		/// </summary>
-		/// <param name="pathToFile"></param>
-		/// <returns></returns>
-		/// <exception cref="ArgumentException"></exception>
-		/// <exception cref="FileLoadException"></exception>
-		public async Task<bool> ImportFileProperties(string pathToFile)
-		{
+                if (!_targetFiles.Exists(x => x.FilePath == file))
+                {
+                    SwFileItem swFileItem = new SwFileItem();
+                    swFileItem.FilePath = file;
+                    _targetFiles.Add(swFileItem);
+                }
+            }
+        }
 
-			if (string.IsNullOrEmpty(pathToFile) || !File.Exists(pathToFile))
-				throw new ArgumentException(nameof(pathToFile));
+        /// <summary>
+        /// Add files from list of pathes to _importedFiles
+        /// </summary>
+        /// <param name="pathes"></param>
+        /// <exception cref="ArgumentException"></exception>
+        public void AddFiles(string[] pathes)
+        {
+            if (pathes == null || pathes.Count() == 0)
+                throw new ArgumentException(nameof(pathes));
 
-			///Start or get solidworks process
+            foreach (string path in pathes)
+            {
+                if (string.IsNullOrEmpty(path) || path.Contains(@"~$")) continue;
 
-			StatusMessage = "Run SolidWorks";
-			SldWorks swApp;
-			try
-			{
-				swApp = await SwHolder.Instance.GetSwAppAsync();
-			}
-			catch (Exception e)
-			{
-				StatusMessage = string.Format("Cautch error esception {0}", e.Message);
-				return false;
-			}
-			StatusMessage = "Solidworks Started";
+                string extension = Path.GetExtension(path)?.ToLower();
+                if (extension == ".sldprt" || extension == ".sldasm" || extension == ".slddrw")
+                {
+                    SwFileItem fileItem = new SwFileItem();
+                    fileItem.FilePath = path;
+                    _targetFiles.Add(fileItem);
+                }
+                else
+                {
+                    Debug.WriteLine(string.Format("Ignoring file {0}", path));
+                }
+            }
 
-			_ = swApp.SetCurrentWorkingDirectory(Path.GetDirectoryName(pathToFile));
+            OnPropertyChanged(nameof(TargetFiles));
+        }
 
-			#region Open_Document
+        /// <summary>
+        /// Read all properties from file and add file to _sourceFiles
+        /// </summary>
+        /// <param name="pathToFile"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="FileLoadException"></exception>
+        public async Task<bool> ImportFileProperties(string pathToFile)
+        {
+            if (string.IsNullOrEmpty(pathToFile) || !File.Exists(pathToFile))
+                throw new ArgumentException(nameof(pathToFile));
 
-			int Error = 0; // file load error code
-			int Warning = 0; // file load warning code
+            ///Start or get solidworks process
 
-			ModelDoc2 doc;
+            StatusMessage = "Run SolidWorks";
+            SldWorks swApp;
+            try
+            {
+                swApp = await SwHolder.Instance.GetSwAppAsync();
+            }
+            catch (Exception e)
+            {
+                StatusMessage = string.Format("Cautch error esception {0}", e.Message);
+                return false;
+            }
+            StatusMessage = "Solidworks Started";
 
-			doc = swApp.GetOpenDocumentByName(pathToFile); // check if file is open, return ModelDoc2 or null
+            _ = swApp.SetCurrentWorkingDirectory(Path.GetDirectoryName(pathToFile));
 
-			if (doc == null)
-			{
-				StatusMessage = string.Format("Openning... {0}", Path.GetFileName(pathToFile));
+            #region Open_Document
 
-				//Open document
-				doc = swApp.OpenDoc6(pathToFile,
-										(int)SwHelperFunction.GetSwDocTypeIdFromExtension(pathToFile),
-										(int)(swOpenDocOptions_e.swOpenDocOptions_Silent | swOpenDocOptions_e.swOpenDocOptions_ReadOnly),
-										"",
-										ref Error,
-										ref Warning);
-			}
+            int Error = 0; // file load error code
+            int Warning = 0; // file load warning code
 
-			if (Error != 0)
-				throw new FileLoadException(string.Format("Open file error code {0:X}", Error));
+            ModelDoc2 doc;
 
-			if (Warning != 0)
-				Debug.WriteLine(string.Format("Open file has warning, code: {0:X}", Warning));
+            doc = swApp.GetOpenDocumentByName(pathToFile); // check if file is open, return ModelDoc2 or null
 
-			StatusMessage = "Rebuild document";
-			doc.Rebuild((int)swRebuildOptions_e.swRebuildAll);
+            if (doc == null)
+            {
+                StatusMessage = string.Format("Openning... {0}", Path.GetFileName(pathToFile));
 
-			#endregion Open_Document
+                //Open document
+                doc = swApp.OpenDoc6(pathToFile,
+                                        (int)SwHelperFunction.GetSwDocTypeIdFromExtension(pathToFile),
+                                        (int)(swOpenDocOptions_e.swOpenDocOptions_Silent | swOpenDocOptions_e.swOpenDocOptions_ReadOnly),
+                                        "",
+                                        ref Error,
+                                        ref Warning);
+            }
 
+            if (Error != 0)
+                throw new FileLoadException(string.Format("Open file error code {0:X}", Error));
 
-			try
-			{
-				_sourceFiles.Add(new SwFileItem(doc));
-			}
-			catch (Exception e)
-			{
-				StatusMessage = string.Format("Cautch error when create fileitem. Cause: {0}", e.Message);
-				return false;
-			}
-			finally
-			{
-				doc.Quit();
-			}
+            if (Warning != 0)
+                Debug.WriteLine(string.Format("Open file has warning, code: {0:X}", Warning));
 
+            StatusMessage = "Rebuild document";
+            doc.Rebuild((int)swRebuildOptions_e.swRebuildAll);
 
-			OnPropertyChanged(nameof(SourceFiles));
+            #endregion Open_Document
 
-			return true;
-		}
+            try
+            {
+                _sourceFiles.Add(new SwFileItem(doc));
+            }
+            catch (Exception e)
+            {
+                StatusMessage = string.Format("Cautch error when create fileitem. Cause: {0}", e.Message);
+                return false;
+            }
+            finally
+            {
+                doc.Quit();
+            }
 
+            OnPropertyChanged(nameof(SourceFiles));
 
-		public void RunProcess()
-		{
-			// write properties from _swSourceProperties to each SwFileItem in _swFileItems
+            return true;
+        }
 
-			throw new NotImplementedException();
-		}
+        public void RunProcess()
+        {
+            // write properties from _swSourceProperties to each SwFileItem in _swFileItems
 
-		public void ClearFileList()
-		{
-			_importedFiles.Clear();
-			OnPropertyChanged(nameof(ImportedFiles));
-		}
+            throw new NotImplementedException();
+        }
 
-		public void ClearPropertyList()
-		{
-			_importedProperties.Clear();
-			OnPropertyChanged(nameof(ImportedProperties));
-		}
-	}
+        public void ClearTargetFileList()
+        {
+            _targetFiles.Clear();
+            OnPropertyChanged(nameof(TargetFiles));
+        }
+
+        public void ClearTargetPropertyList()
+        {
+            _targetProperties.Clear();
+            OnPropertyChanged(nameof(TargetProperties));
+        }
+    }
 }

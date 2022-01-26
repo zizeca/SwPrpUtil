@@ -66,6 +66,11 @@ namespace SwPrpUtil.Models
 			}
 		}
 
+		/// <summary>
+		/// Description solidworks Load file error
+		/// </summary>
+		/// <param name="Error"></param>
+		/// <returns></returns>
 		private static string SwFailLoadCodeToString(swFileLoadError_e Error)
 		{
 			switch (Error)
@@ -166,6 +171,20 @@ namespace SwPrpUtil.Models
 			foreach (Enum value in Enum.GetValues(input.GetType()))
 				if (input.HasFlag(value))
 					yield return value;
+		}
+
+		/// <summary>
+		/// Get solidworks files from dir (without recursion)
+		/// </summary>
+		/// <param name="pathToDir"> path to directory</param>
+		/// <returns>list of solidwroks files or empty</returns>
+		public static IEnumerable<string> GetFilesFromDir(string pathToDir)
+		{
+			return from file in Directory.EnumerateFiles(pathToDir)
+				   where Path.GetExtension(file)?.ToLower() == ".sldprt" ||
+						   Path.GetExtension(file)?.ToLower() == ".sldasm" ||
+						   Path.GetExtension(file)?.ToLower() == ".slddrw"
+				   select file;
 		}
 	}
 }

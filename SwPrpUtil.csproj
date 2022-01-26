@@ -104,8 +104,9 @@
     <Compile Include="Infrastructure\ObservableObject.cs" />
     <Compile Include="Infrastructure\PropertyTypeConverter.cs" />
     <Compile Include="Infrastructure\SimpleFolderConverter.cs" />
-    <Compile Include="Models\SwFileConfiguration.cs" />
+    <Compile Include="Models\SwCustomProperty.cs" />
     <Compile Include="Models\SwFileItem.cs" />
+    <Compile Include="Models\SwFileProperty.cs" />
     <Compile Include="Models\SwFileSummaryInfo.cs" />
     <Compile Include="Models\SwHelperFunction.cs" />
     <Compile Include="Models\SwHolder.cs" />

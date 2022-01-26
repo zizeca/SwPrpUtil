@@ -112,12 +112,12 @@ namespace SwPrpUtil.ViewModels
 						StatusText = _editor.StatusMessage;
 						break;
 
-					case nameof(_editor.ImportedProperties):
-						SourceProperties = _editor.ImportedProperties;
+					case nameof(_editor.TargetProperties):
+						SourceProperties = _editor.TargetProperties;
 						break;
 
-					case nameof(_editor.ImportedFiles):
-						SwFileItems = _editor.ImportedFiles;
+					case nameof(_editor.TargetFiles):
+						SwFileItems = _editor.TargetFiles;
 						break;
 				}
 			};

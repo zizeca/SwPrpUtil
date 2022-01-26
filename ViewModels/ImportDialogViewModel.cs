@@ -29,7 +29,10 @@ namespace SwPrpUtil.ViewModels
 
 		public List<SwFileItem> FileItems { get => _fileItems; set => Set(ref _fileItems, value); }
 
-		private SwPrpEditor _editor;
+
+        public SwProperty SelectedProperty { get; set; }
+
+        private SwPrpEditor _editor;
 
 		public ImportDialogViewModel()
 		{
@@ -43,7 +46,7 @@ namespace SwPrpUtil.ViewModels
 						StatusText = _editor.StatusMessage;
 						break;
 
-					case nameof(_editor.ImportedFiles):
+					case nameof(_editor.TargetFiles):
 						OnPropertyChanged(nameof(FileItems));
 						break;
 				}
@@ -67,15 +70,15 @@ namespace SwPrpUtil.ViewModels
 			prp1.TypePrp = SolidWorks.Interop.swconst.swCustomInfoType_e.swCustomInfoText;
 
 
-			item.MainProperty = new SwFileConfiguration("Main properties", new List<SwProperty>() { prp, prp1, prp });
-			item2.MainProperty = new SwFileConfiguration("Main properties", new List<SwProperty>() { prp, prp1, prp });
+			item.MainProperty = new SwCustomProperty("Main properties", new List<SwProperty>() { prp, prp1, prp });
+			item2.MainProperty = new SwCustomProperty("Main properties", new List<SwProperty>() { prp, prp1, prp });
 
-			SwFileConfiguration cnf1 = new SwFileConfiguration("Config 1", new List<SwProperty>() { prp, prp1, prp });
-			SwFileConfiguration cnf2 = new SwFileConfiguration("Config 2", new List<SwProperty>() { prp, prp1, prp });
-			SwFileConfiguration cnf3 = new SwFileConfiguration("Config 3", new List<SwProperty>() { prp, prp1, prp });
+			SwCustomProperty cnf1 = new SwCustomProperty("Config 1", new List<SwProperty>() { prp, prp1, prp });
+			SwCustomProperty cnf2 = new SwCustomProperty("Config 2", new List<SwProperty>() { prp, prp1, prp });
+			SwCustomProperty cnf3 = new SwCustomProperty("Config 3", new List<SwProperty>() { prp, prp1, prp });
 
-			item.SwFileConfigurations = new List<SwFileConfiguration>() { cnf1, cnf2, cnf3 };
-			item2.SwFileConfigurations = new List<SwFileConfiguration>() { cnf1, cnf2, cnf3 };
+			item.SwFileConfigurations = new List<SwCustomProperty>() { cnf1, cnf2, cnf3 };
+			item2.SwFileConfigurations = new List<SwCustomProperty>() { cnf1, cnf2, cnf3 };
 			_fileItems = new List<SwFileItem>() { item, item2 };
 			//*/
 		}

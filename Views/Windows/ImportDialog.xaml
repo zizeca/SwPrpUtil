@@ -36,7 +36,7 @@
             <TextBlock Text="{Binding Path=FileName}" />
         </HierarchicalDataTemplate>
 
-        <HierarchicalDataTemplate DataType="{x:Type model:SwFileConfiguration}">
+        <HierarchicalDataTemplate DataType="{x:Type model:SwCustomProperty}">
 			<TextBlock Text="{Binding Path=ConfigurationName}"/>
 
 		</HierarchicalDataTemplate>
@@ -54,7 +54,13 @@
 		<StackPanel>
 			<Button Content="Import" Command="{Binding Path=ImoprtPorperties}" />
 		</StackPanel>
-		<TreeView Grid.Column="1" ItemsSource="{Binding Path=FileItems}" x:Name="ConfigTree" />
+        <TreeView Grid.Column="1" ItemsSource="{Binding Path=FileItems}" x:Name="ConfigTree" >
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+        </TreeView>
 
         <DataGrid Grid.Column="2" ItemsSource="{Binding ElementName=ConfigTree, Path=SelectedItem.Properties, Mode=OneWay}" AutoGenerateColumns="False" IsReadOnly="True" >
             <DataGrid.Columns>

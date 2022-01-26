@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SwPrpUtil.Models
 {
-	internal class SwFileConfiguration
+	internal class SwCustomProperty
 	{
 		//public SwFileConfiguration BaseFileConfiguration { get; set; }
 
@@ -16,13 +16,13 @@ namespace SwPrpUtil.Models
 
 		public List<SwProperty> Properties { get; set; }
 
-		public SwFileConfiguration(string configurationName, List<SwProperty> properties)
+		public SwCustomProperty(string configurationName, List<SwProperty> properties)
 		{
 			ConfigurationName = configurationName;
 			Properties = properties;
 		}
 
-		public SwFileConfiguration()
+		public SwCustomProperty()
 		{
 		}
 	}
