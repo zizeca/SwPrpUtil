@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SwPrpUtil.Models
@@ -13,7 +13,12 @@ namespace SwPrpUtil.Models
     internal class SwPrpEditor : ObservableObject
     {
         private List<SwFileItem> _targetFiles;
-        public List<SwFileItem> TargetFiles { get => _targetFiles; }
+
+        public List<SwFileItem> TargetFiles
+        {
+            get => _targetFiles;
+            set => Set(ref _targetFiles, value);
+        }
 
         private List<SwFileItem> _sourceFiles;
         public List<SwFileItem> SourceFiles { get => _sourceFiles; }
@@ -23,7 +28,11 @@ namespace SwPrpUtil.Models
         /// </summary>
         private List<SwProperty> _targetProperties;
 
-        public List<SwProperty> TargetProperties { get => _targetProperties; }
+        public List<SwProperty> TargetProperties
+        {
+            get => _targetProperties;
+            set => Set(ref _targetProperties, value);
+        }
 
         private string _statusMessage = "Ready";
 
@@ -42,29 +51,6 @@ namespace SwPrpUtil.Models
             _targetProperties = new List<SwProperty>();
             _targetFiles = new List<SwFileItem>();
             _sourceFiles = new List<SwFileItem>();
-        }
-
-        /// <summary>
-        /// Get all files from direcory "pathToFolder" and run AddFiles method
-        /// </summary>
-        /// <param name="pathToFolder"> path to directory with SolidWorks files </param>
-        /// <returns> true if success to add files </returns>
-        /// <exception cref="DirectoryNotFoundException"></exception>
-        public bool AddFolder(string pathToFolder)
-        {
-            if (!Directory.Exists(pathToFolder))
-                throw new DirectoryNotFoundException(pathToFolder);
-
-            string[] files = Directory.GetFiles(pathToFolder);
-            if (files.Length == 0)
-            {
-                Debug.WriteLine(string.Format("Directory {0} has not files", pathToFolder));
-                return false;
-            }
-
-            AddFiles(files);
-
-            return true;
         }
 
         /// <summary>
@@ -91,35 +77,6 @@ namespace SwPrpUtil.Models
                     _targetFiles.Add(swFileItem);
                 }
             }
-        }
-
-        /// <summary>
-        /// Add files from list of pathes to _importedFiles
-        /// </summary>
-        /// <param name="pathes"></param>
-        /// <exception cref="ArgumentException"></exception>
-        public void AddFiles(string[] pathes)
-        {
-            if (pathes == null || pathes.Count() == 0)
-                throw new ArgumentException(nameof(pathes));
-
-            foreach (string path in pathes)
-            {
-                if (string.IsNullOrEmpty(path) || path.Contains(@"~$")) continue;
-
-                string extension = Path.GetExtension(path)?.ToLower();
-                if (extension == ".sldprt" || extension == ".sldasm" || extension == ".slddrw")
-                {
-                    SwFileItem fileItem = new SwFileItem();
-                    fileItem.FilePath = path;
-                    _targetFiles.Add(fileItem);
-                }
-                else
-                {
-                    Debug.WriteLine(string.Format("Ignoring file {0}", path));
-                }
-            }
-
             OnPropertyChanged(nameof(TargetFiles));
         }
 
@@ -204,11 +161,69 @@ namespace SwPrpUtil.Models
             return true;
         }
 
-        public void RunProcess()
+        public async void ModifyTargetFilesAsync(List<SwProperty> customProperties,
+                                                    CancellationToken token,
+                                                    bool modifyMainProperty,
+                                                    bool modifyConfigProperty,
+                                                    bool rewriteIfExist)
         {
-            // write properties from _swSourceProperties to each SwFileItem in _swFileItems
+            if (customProperties == null) throw new ArgumentNullException(nameof(customProperties));
 
+            StatusMessage = "Run SolidWorks";
+            SldWorks swApp;
+            try
+            {
+                swApp = await SwHolder.Instance.GetSwAppAsync();
+            }
+            catch (Exception e)
+            {
+                StatusMessage = string.Format("Cautch error esception {0}", e.Message);
+                return;
+            }
+            StatusMessage = "Solidworks Started";
+
+            foreach (var file in _targetFiles)
+            {
+                if (token.IsCancellationRequested)
+                {
+                    StatusMessage = "Operation cancelled";
+                    return;
+                }
+
+                int Error = 0; // file load error code
+                int Warning = 0; // file load warning code
+
+                ModelDoc2 doc = await Task.Run(() =>
+                {
+                    return swApp.OpenDoc6(file.FilePath, (int)SwHelperFunction.GetSwDocTypeIdFromExtension(file.FilePath), (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", ref Error, ref Warning);
+                });
+                if (doc != null || Error != 0) continue;
+
+                if(modifyMainProperty)
+                {
+                    ModifyCustomProperty(doc, customProperties, "", rewriteIfExist);
+                }
+
+                if(modifyConfigProperty)
+                {
+                    string[] configurations = doc.GetConfigurationNames();
+                    foreach (string configuration in configurations)
+                    {
+                        ModifyCustomProperty(doc, customProperties, configuration, rewriteIfExist);
+                    }
+                }
+            }
             throw new NotImplementedException();
+        }
+
+        private void ModifyCustomProperty(ModelDoc2 doc, List<SwProperty> customProperties, string configName ,bool rewriteIfExist)
+        {
+            CustomPropertyManager manager = doc.Extension.CustomPropertyManager[configName];
+            swCustomPropertyAddOption_e option = rewriteIfExist ? swCustomPropertyAddOption_e.swCustomPropertyReplaceValue : swCustomPropertyAddOption_e.swCustomPropertyOnlyIfNew;
+            foreach (SwProperty item in customProperties)
+            {
+                manager.Add3(item.PropertyName, (int)item.TypePrp, item.Expression, (int)option);               
+            }
         }
 
         public void ClearTargetFileList()

@@ -6,6 +6,9 @@ using System.Windows;
 
 namespace SwPrpUtil.Models
 {
+	/// <summary>
+	/// Singleton class fot isntant Solidworks aplication
+	/// </summary>
 	public class SwHolder : IDisposable
 	{
 		private static SwHolder _instance = null;

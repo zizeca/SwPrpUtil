@@ -69,9 +69,10 @@ namespace SwPrpUtil.ViewModels
 			prp1.Expression = "expression1";
 			prp1.TypePrp = SolidWorks.Interop.swconst.swCustomInfoType_e.swCustomInfoText;
 
+			SwCustomProperty property = new SwCustomProperty("Main properties", new List<SwProperty>() { prp, prp1, prp });
 
-			item.MainProperty = new SwCustomProperty("Main properties", new List<SwProperty>() { prp, prp1, prp });
-			item2.MainProperty = new SwCustomProperty("Main properties", new List<SwProperty>() { prp, prp1, prp });
+			item.FileProperties = new SwFileProperty();
+			item2.MainProperty
 
 			SwCustomProperty cnf1 = new SwCustomProperty("Config 1", new List<SwProperty>() { prp, prp1, prp });
 			SwCustomProperty cnf2 = new SwCustomProperty("Config 2", new List<SwProperty>() { prp, prp1, prp });

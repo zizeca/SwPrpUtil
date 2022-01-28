@@ -32,7 +32,7 @@ namespace SwPrpUtil.Models
 		/// Get properties from solidworks document
 		/// </summary>
 		/// <param name="doc">Opened document in solidworks application</param>
-		/// <param name="configName">configuration name. If name if "" return Main properties</param>
+		/// <param name="configName">configuration name. If name is "" return Main properties</param>
 		/// <returns>List of properties</returns>
 		/// <exception cref="ArgumentNullException"></exception>
 		public static List<SwProperty> GetSwProperties(ref ModelDoc2 doc, string configName = "")

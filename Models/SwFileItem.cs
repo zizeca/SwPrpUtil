@@ -17,9 +17,12 @@ namespace SwPrpUtil.Models
         public string FileNameWithoutExtension { get; private set; }
 
         /// <summary>
-        /// File path fill other info of path to file/
-        /// No check extension and type of file
+        /// Full path to file
         /// </summary>
+        /// <remarks>
+        /// File path fill other info of path to file <br/>
+        /// No check extension and type of file
+        /// </remarks>
         public string FilePath
         {
             get => _filePath;

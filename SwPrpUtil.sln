@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31313.79
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwPrpUtil", "SwPrpUtil.csproj", "{63AE48EA-D5CF-4921-8E8A-C572D1124AEB}"
 EndProject
@@ -10,6 +10,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwPrpUtilConsole", "Tests\SwPrpUtilConsole\SwPrpUtilConsole.csproj", "{61D9856E-651C-4294-BB1C-3F41F77057D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwPrpUtilWpfTest", "Tests\SwPrpUtilWpfTest\SwPrpUtilWpfTest.csproj", "{F6B665AA-58B0-4213-8951-0CA11B311735}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B3DFD416-3188-4A1C-AE47-0007817D9523}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
