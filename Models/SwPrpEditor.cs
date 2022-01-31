@@ -161,13 +161,12 @@ namespace SwPrpUtil.Models
             return true;
         }
 
-        public async void ModifyTargetFilesAsync(List<SwProperty> customProperties,
-                                                    CancellationToken token,
+        public async void ModifyTargetFilesAsync(   CancellationToken token,
                                                     bool modifyMainProperty,
                                                     bool modifyConfigProperty,
                                                     bool rewriteIfExist)
         {
-            if (customProperties == null) throw new ArgumentNullException(nameof(customProperties));
+            if (_targetProperties == null) throw new ArgumentNullException(nameof(_targetProperties));
 
             StatusMessage = "Run SolidWorks";
             SldWorks swApp;
@@ -190,8 +189,8 @@ namespace SwPrpUtil.Models
                     return;
                 }
 
-                int Error = 0; // file load error code
-                int Warning = 0; // file load warning code
+                int Error = 0; // file load or save error code
+                int Warning = 0; // file load or save warning code
 
                 ModelDoc2 doc = await Task.Run(() =>
                 {
@@ -199,9 +198,11 @@ namespace SwPrpUtil.Models
                 });
                 if (doc != null || Error != 0) continue;
 
+                
+
                 if(modifyMainProperty)
                 {
-                    ModifyCustomProperty(doc, customProperties, "", rewriteIfExist);
+                    ModifyCustomProperty(doc, "", rewriteIfExist);
                 }
 
                 if(modifyConfigProperty)
@@ -209,18 +210,24 @@ namespace SwPrpUtil.Models
                     string[] configurations = doc.GetConfigurationNames();
                     foreach (string configuration in configurations)
                     {
-                        ModifyCustomProperty(doc, customProperties, configuration, rewriteIfExist);
+                        ModifyCustomProperty(doc, configuration, rewriteIfExist);
                     }
                 }
+
+                _ = doc.Save3((int)swSaveAsOptions_e.swSaveAsOptions_Silent, ref Error, ref Warning);
+
+                swApp.CloseDoc(doc.GetPathName());
+                doc = null;
+
             }
-            throw new NotImplementedException();
+ 
         }
 
-        private void ModifyCustomProperty(ModelDoc2 doc, List<SwProperty> customProperties, string configName ,bool rewriteIfExist)
+        private void ModifyCustomProperty(ModelDoc2 doc, string configName ,bool rewriteIfExist)
         {
             CustomPropertyManager manager = doc.Extension.CustomPropertyManager[configName];
             swCustomPropertyAddOption_e option = rewriteIfExist ? swCustomPropertyAddOption_e.swCustomPropertyReplaceValue : swCustomPropertyAddOption_e.swCustomPropertyOnlyIfNew;
-            foreach (SwProperty item in customProperties)
+            foreach (SwProperty item in _targetProperties)
             {
                 manager.Add3(item.PropertyName, (int)item.TypePrp, item.Expression, (int)option);               
             }
