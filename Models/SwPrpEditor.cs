@@ -15,28 +15,35 @@ namespace SwPrpUtil.Models
         #region prop
 
         private List<SwFileItem> _targetFiles;
+        private List<SwFileItem> _sourceFiles;
+        private List<SwProperty> _targetProperties;
+        private string _statusMessage = "Ready";
 
+        /// <summary>
+        /// Files witch must be change
+        /// </summary>
         public List<SwFileItem> TargetFiles
         {
             get => _targetFiles;
             set => Set(ref _targetFiles, value);
         }
 
-        private List<SwFileItem> _sourceFiles;
+        /// <summary>
+        /// Collect files for extract properties
+        /// </summary>
+        /// <remarks>
+        /// Need choose once file and extract properties
+        /// </remarks>
         public List<SwFileItem> SourceFiles { get => _sourceFiles; }
 
         /// <summary>
         /// Properties for modify and add to target files
         /// </summary>
-        private List<SwProperty> _targetProperties;
-
         public List<SwProperty> TargetProperties
         {
             get => _targetProperties;
             set => Set(ref _targetProperties, value);
         }
-
-        private string _statusMessage = "Ready";
 
         /// <summary>
         /// Status of state SwPrpEditor
@@ -47,6 +54,8 @@ namespace SwPrpUtil.Models
             private set => Set(ref _statusMessage, value);
         }
 
+        #endregion prop
+
         //ctor
         public SwPrpEditor()
         {
@@ -55,10 +64,8 @@ namespace SwPrpUtil.Models
             _sourceFiles = new List<SwFileItem>();
         }
 
-        #endregion prop
-
         /// <summary>
-        /// Create SwFileItem and add to _targetFiles
+        /// Create SwFileItem and add to _targetFiles without Custom properties
         /// </summary>
         /// <param name="files"> pathes to solidworks files</param>
         public void AddTargetFiles(IEnumerable<string> files)
@@ -166,9 +173,8 @@ namespace SwPrpUtil.Models
                                                     bool modifyConfigProperty,
                                                     bool rewriteIfExist)
         {
-            if (_targetProperties == null || _targetProperties.Count == 0) 
+            if (_targetProperties == null || _targetProperties.Count == 0)
                 throw new InvalidOperationException("Target properties is null or empty");
-
 
             StatusMessage = "Run SolidWorks";
             SldWorks swApp;
@@ -196,8 +202,8 @@ namespace SwPrpUtil.Models
 
                 ModelDoc2 doc = await Task.Run(() =>
                 {
-                    return swApp.OpenDoc6(  file.FilePath, 
-                                            (int)SwHelperFunction.GetSwDocTypeIdFromExtension(file.FilePath), 
+                    return swApp.OpenDoc6(file.FilePath,
+                                            (int)SwHelperFunction.GetSwDocTypeIdFromExtension(file.FilePath),
                                             (int)swOpenDocOptions_e.swOpenDocOptions_Silent,
                                             "",
                                             ref Error,
@@ -249,7 +255,6 @@ namespace SwPrpUtil.Models
             OnPropertyChanged(nameof(TargetProperties));
         }
 
-
         #region ExtractProperties
 
         public static List<SwProperty> ExtractProperties(SwFileItem fileItem, string configName = "")
@@ -268,6 +273,64 @@ namespace SwPrpUtil.Models
         {
             if (swCustomProperty == null) throw new ArgumentNullException(nameof(swCustomProperty));
             return swCustomProperty.Properties;
+        }
+
+        public static List<SwProperty> ExtractProperties(ModelDoc2 doc, string configName)
+        {
+            return SwFileProperty.GetPropertiesFromSwDoc(doc, configName);
+        }
+
+        public async Task<List<SwProperty>> ExtractPropertiesAsync(string filePath, string configName = "")
+        {
+            SldWorks swApp;
+            try
+            {
+                swApp = await SwHolder.Instance.GetSwAppAsync();
+            }
+            catch (Exception e)
+            {
+                StatusMessage = string.Format("Cautch error esception {0}", e.Message);
+                throw e;
+            }
+
+            int Error = 0;
+            int Warning = 0;
+
+            // maybe unnessesary, need check sw api doc
+            ModelDoc2 doc = await Task.Run(() =>
+            {
+                return swApp.OpenDoc6(filePath,
+                                        (int)SwHelperFunction.GetSwDocTypeIdFromExtension(filePath),
+                                        (int)(swOpenDocOptions_e.swOpenDocOptions_Silent | swOpenDocOptions_e.swOpenDocOptions_ReadOnly),
+                                        configName,
+                                        ref Error,
+                                        ref Warning);
+            });
+
+            if (Error != 0)
+            {
+                doc.Quit();
+                throw new InvalidOperationException("Open document: " + filePath);
+            }
+
+            List<SwProperty> retVal;
+
+            try
+            {
+                retVal = ExtractProperties(doc, configName);
+            }
+            catch (Exception e)
+            {
+                StatusMessage = string.Format("Cautch error esception {0}", e.Message);
+                throw e;
+            }
+            finally
+            {
+                doc.Quit();
+                doc = null;
+            }
+
+            return retVal;
         }
 
         #endregion ExtractProperties

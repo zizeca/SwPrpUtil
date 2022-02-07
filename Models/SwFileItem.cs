@@ -48,6 +48,7 @@ namespace SwPrpUtil.Models
 
         public SwFileItem(string path)
         {
+            FileProperties = null;
             this.FilePath = path;
         }
 
