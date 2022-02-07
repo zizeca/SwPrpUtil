@@ -12,6 +12,8 @@ namespace SwPrpUtil.Models
 {
     internal class SwPrpEditor : ObservableObject
     {
+        #region prop
+
         private List<SwFileItem> _targetFiles;
 
         public List<SwFileItem> TargetFiles
@@ -53,6 +55,8 @@ namespace SwPrpUtil.Models
             _sourceFiles = new List<SwFileItem>();
         }
 
+        #endregion prop
+
         /// <summary>
         /// Create SwFileItem and add to _targetFiles
         /// </summary>
@@ -71,11 +75,7 @@ namespace SwPrpUtil.Models
                     _targetFiles = new List<SwFileItem>();
 
                 if (!_targetFiles.Exists(x => x.FilePath == file))
-                {
-                    SwFileItem swFileItem = new SwFileItem();
-                    swFileItem.FilePath = file;
-                    _targetFiles.Add(swFileItem);
-                }
+                    _targetFiles.Add(new SwFileItem(file));
             }
             OnPropertyChanged(nameof(TargetFiles));
         }
@@ -137,8 +137,8 @@ namespace SwPrpUtil.Models
             if (Warning != 0)
                 Debug.WriteLine(string.Format("Open file has warning, code: {0:X}", Warning));
 
-            StatusMessage = "Rebuild document";
-            doc.Rebuild((int)swRebuildOptions_e.swRebuildAll);
+            //StatusMessage = "Rebuild document";
+            //doc.Rebuild((int)swRebuildOptions_e.swRebuildAll);
 
             #endregion Open_Document
 
@@ -161,12 +161,14 @@ namespace SwPrpUtil.Models
             return true;
         }
 
-        public async void ModifyTargetFilesAsync(   CancellationToken token,
+        public async void ModifyTargetFilesAsync(CancellationToken token,
                                                     bool modifyMainProperty,
                                                     bool modifyConfigProperty,
                                                     bool rewriteIfExist)
         {
-            if (_targetProperties == null) throw new ArgumentNullException(nameof(_targetProperties));
+            if (_targetProperties == null || _targetProperties.Count == 0) 
+                throw new InvalidOperationException("Target properties is null or empty");
+
 
             StatusMessage = "Run SolidWorks";
             SldWorks swApp;
@@ -194,18 +196,22 @@ namespace SwPrpUtil.Models
 
                 ModelDoc2 doc = await Task.Run(() =>
                 {
-                    return swApp.OpenDoc6(file.FilePath, (int)SwHelperFunction.GetSwDocTypeIdFromExtension(file.FilePath), (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", ref Error, ref Warning);
+                    return swApp.OpenDoc6(  file.FilePath, 
+                                            (int)SwHelperFunction.GetSwDocTypeIdFromExtension(file.FilePath), 
+                                            (int)swOpenDocOptions_e.swOpenDocOptions_Silent,
+                                            "",
+                                            ref Error,
+                                            ref Warning);
                 });
+
                 if (doc != null || Error != 0) continue;
 
-                
-
-                if(modifyMainProperty)
+                if (modifyMainProperty)
                 {
                     ModifyCustomProperty(doc, "", rewriteIfExist);
                 }
 
-                if(modifyConfigProperty)
+                if (modifyConfigProperty)
                 {
                     string[] configurations = doc.GetConfigurationNames();
                     foreach (string configuration in configurations)
@@ -218,18 +224,16 @@ namespace SwPrpUtil.Models
 
                 swApp.CloseDoc(doc.GetPathName());
                 doc = null;
-
             }
- 
         }
 
-        private void ModifyCustomProperty(ModelDoc2 doc, string configName ,bool rewriteIfExist)
+        private void ModifyCustomProperty(ModelDoc2 doc, string configName, bool rewriteIfExist)
         {
             CustomPropertyManager manager = doc.Extension.CustomPropertyManager[configName];
             swCustomPropertyAddOption_e option = rewriteIfExist ? swCustomPropertyAddOption_e.swCustomPropertyReplaceValue : swCustomPropertyAddOption_e.swCustomPropertyOnlyIfNew;
             foreach (SwProperty item in _targetProperties)
             {
-                manager.Add3(item.PropertyName, (int)item.TypePrp, item.Expression, (int)option);               
+                manager.Add3(item.PropertyName, (int)item.TypePrp, item.Expression, (int)option);
             }
         }
 
@@ -244,5 +248,28 @@ namespace SwPrpUtil.Models
             _targetProperties.Clear();
             OnPropertyChanged(nameof(TargetProperties));
         }
+
+
+        #region ExtractProperties
+
+        public static List<SwProperty> ExtractProperties(SwFileItem fileItem, string configName = "")
+        {
+            if (fileItem == null) throw new ArgumentNullException(nameof(fileItem));
+            return ExtractProperties(fileItem.FileProperties, configName);
+        }
+
+        public static List<SwProperty> ExtractProperties(SwFileProperty fileProperty, string configName = "")
+        {
+            if (fileProperty == null) throw new ArgumentNullException(nameof(fileProperty));
+            return fileProperty.GetProperties(configName);
+        }
+
+        public static List<SwProperty> ExtractProperties(SwCustomProperty swCustomProperty)
+        {
+            if (swCustomProperty == null) throw new ArgumentNullException(nameof(swCustomProperty));
+            return swCustomProperty.Properties;
+        }
+
+        #endregion ExtractProperties
     }
 }

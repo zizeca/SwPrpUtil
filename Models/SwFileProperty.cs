@@ -18,7 +18,20 @@ namespace SwPrpUtil.Models
 			this.ReadFilePropertyFromDoc(doc);
         }
 
-		public SwFileSummaryInfo SummaryInfo { get; set; }
+		public List<SwProperty> GetProperties(string configName = "")
+        {
+			if (configName == "") return this.MainProperty.Properties;
+
+            foreach (var config in this.SwFileConfigurations)
+            {
+				if(config.ConfigurationName == configName)
+					return config.Properties;
+            }
+			throw new Exception(configName + " Not found");
+        }
+
+
+        public SwFileSummaryInfo SummaryInfo { get; set; }
 
 		// Main custom property
 		//public List<SwProperty> MainProperty { get; set; }
@@ -35,7 +48,7 @@ namespace SwPrpUtil.Models
 		/// <param name="configName">configuration name. If name is "" return Main properties</param>
 		/// <returns>List of properties</returns>
 		/// <exception cref="ArgumentNullException"></exception>
-		public static List<SwProperty> GetSwProperties(ref ModelDoc2 doc, string configName = "")
+		public static List<SwProperty> GetPropertiesFromSwDoc(ref ModelDoc2 doc, string configName = "")
 		{
 			if (doc == null)
 				throw new ArgumentNullException(nameof(doc));
@@ -91,13 +104,13 @@ namespace SwPrpUtil.Models
 			if (configNames == null || configNames.Count() == 0)
 				throw new Exception("Configuration get exception");
 
-			MainProperty = new SwCustomProperty("Main Properties", GetSwProperties(ref doc));
+			MainProperty = new SwCustomProperty("Main Properties", GetPropertiesFromSwDoc(ref doc));
 			SummaryInfo = new SwFileSummaryInfo(doc);
 
 			SwFileConfigurations = new List<SwCustomProperty>();
 			foreach (string configName in configNames)
 			{
-				SwCustomProperty fc = new SwCustomProperty(configName, GetSwProperties(ref doc, configName));
+				SwCustomProperty fc = new SwCustomProperty(configName, GetPropertiesFromSwDoc(ref doc, configName));
 				SwFileConfigurations.Add(fc);
 			}
 
