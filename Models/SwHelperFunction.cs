@@ -84,7 +84,7 @@ namespace SwPrpUtil.Models
 		/// </summary>
 		/// <param name="Error"></param>
 		/// <returns></returns>
-		private static string SwFailLoadCodeToString(swFileLoadError_e Error)
+		public static string SwFailLoadCodeToString(swFileLoadError_e Error)
 		{
 			switch (Error)
 			{
@@ -179,7 +179,7 @@ namespace SwPrpUtil.Models
 		/// </remarks>
 		/// <param name="input">Enumiration flags</param>
 		/// <returns>Array flags</returns>
-		private static IEnumerable<Enum> GetFlags(Enum input)
+		public static IEnumerable<Enum> GetFlags(Enum input)
 		{
 			foreach (Enum value in Enum.GetValues(input.GetType()))
 				if (input.HasFlag(value))

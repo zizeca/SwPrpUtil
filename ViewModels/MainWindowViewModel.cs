@@ -49,21 +49,27 @@ namespace SwPrpUtil.ViewModels
 
 		#region List_properties
 
-		private List<SwProperty> _sourceProperties;
+		private List<SwProperty> _targetProperties;
 
-		public List<SwProperty> SourceProperties
-		{ get => _sourceProperties; set => Set(ref _sourceProperties, value); }
+		/// <summary>
+		/// Properties witch will write to TargetFiles
+		/// </summary>
+		public List<SwProperty> TargetProperties
+		{ get => _targetProperties; set => Set(ref _targetProperties, value); }
 
 		#endregion List_properties
 
 		#region Files_for_export_panel
 
-		private List<SwFileItem> _swFileItems;
+		private List<SwFileItem> _targetFileItems;
 
-		public List<SwFileItem> SwFileItems
+		/// <summary>
+		/// List files (SwFileItem) fo modyfication
+		/// </summary>
+		public List<SwFileItem> TargetFileItems
 		{
-			get => _swFileItems;
-			set => Set(ref _swFileItems, value);
+			get => _targetFileItems;
+			set => Set(ref _targetFileItems, value);
 		}
 
 		#endregion Files_for_export_panel
@@ -99,8 +105,8 @@ namespace SwPrpUtil.ViewModels
 
 			#endregion Command_relay
 
-			_sourceProperties = new List<SwProperty>();
-			_swFileItems = new List<SwFileItem>();
+			_targetProperties = new List<SwProperty>();
+			_targetFileItems = new List<SwFileItem>();
 
 			_editor = new SwPrpEditor();
 
@@ -113,11 +119,11 @@ namespace SwPrpUtil.ViewModels
 						break;
 
 					case nameof(_editor.TargetProperties):
-						SourceProperties = _editor.TargetProperties;
+						TargetProperties = _editor.TargetProperties;
 						break;
 
 					case nameof(_editor.TargetFiles):
-						SwFileItems = _editor.TargetFiles;
+						TargetFileItems = _editor.TargetFiles;
 						break;
 				}
 			};
@@ -160,7 +166,15 @@ namespace SwPrpUtil.ViewModels
 
 			if (dialog.ShowDialog() == DialogResult.OK)
 			{
-				_ = _editor.AddFolder(dialog.SelectedPath);
+                try
+                {
+					string[] files = SwHelperFunction.GetFilesFromDir(dialog.SelectedPath).ToArray();
+					_editor.AddTargetFiles(files);
+                }
+                catch (Exception e)
+                {
+                    System.Windows.MessageBox.Show("Error to add files, cause:\n" + e.Message);
+                }
 			}
 		}
 

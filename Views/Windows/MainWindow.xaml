@@ -107,7 +107,7 @@
 
 					<GroupBox Header="Properties" Grid.Column="0" Grid.Row="1">
 						<!-- -->
-						<DataGrid  ItemsSource="{Binding Path=SourceProperties, Mode=TwoWay}" CanUserAddRows="True" AutoGenerateColumns="False" IsReadOnly="False">
+						<DataGrid  ItemsSource="{Binding Path=TargetProperties, Mode=TwoWay}" CanUserAddRows="True" AutoGenerateColumns="False" IsReadOnly="False">
 							<DataGrid.Columns>
 
 								<DataGridTextColumn
@@ -136,7 +136,7 @@
 					</GroupBox>
 					<GridSplitter Grid.Column="1" Grid.RowSpan="2" Width="5" HorizontalAlignment="Stretch" Foreground="#FF2A21D6" Background="#FFC3DCEE" />
 					<GroupBox Header="Files" Grid.Column="3" Grid.Row="1">
-						<DataGrid ItemsSource="{Binding Path=SwFileItems}" CanUserAddRows="False" AutoGenerateColumns="False" IsReadOnly="True">
+						<DataGrid ItemsSource="{Binding Path=TargetFileItems}" CanUserAddRows="False" AutoGenerateColumns="False" IsReadOnly="True">
 							<DataGrid.Columns>
 								<DataGridTextColumn Header="File Name" MinWidth="100" Binding="{Binding Path=FileName}" />
 								<DataGridTextColumn Header="Status" />
