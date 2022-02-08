@@ -72,14 +72,14 @@ namespace SwPrpUtil.ViewModels
 			SwCustomProperty property = new SwCustomProperty("Main properties", new List<SwProperty>() { prp, prp1, prp });
 
 			item.FileProperties = new SwFileProperty();
-			item2.MainProperty
+			item2.FileProperties = new SwFileProperty();
 
 			SwCustomProperty cnf1 = new SwCustomProperty("Config 1", new List<SwProperty>() { prp, prp1, prp });
 			SwCustomProperty cnf2 = new SwCustomProperty("Config 2", new List<SwProperty>() { prp, prp1, prp });
 			SwCustomProperty cnf3 = new SwCustomProperty("Config 3", new List<SwProperty>() { prp, prp1, prp });
 
-			item.SwFileConfigurations = new List<SwCustomProperty>() { cnf1, cnf2, cnf3 };
-			item2.SwFileConfigurations = new List<SwCustomProperty>() { cnf1, cnf2, cnf3 };
+			item.FileProperties.SwFileConfigurations = new List<SwCustomProperty>() { cnf1, cnf2, cnf3 };
+			item2.FileProperties.SwFileConfigurations = new List<SwCustomProperty>() { cnf1, cnf2, cnf3 };
 			_fileItems = new List<SwFileItem>() { item, item2 };
 			//*/
 		}
