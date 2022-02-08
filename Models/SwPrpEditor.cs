@@ -68,15 +68,12 @@ namespace SwPrpUtil.Models
         /// Create SwFileItem and add to _targetFiles without Custom properties
         /// </summary>
         /// <param name="files"> pathes to solidworks files</param>
-        public void AddTargetFiles(IEnumerable<string> files)
+        public void AddTargetFiles(string[] files)
         {
-            foreach (string file in files)
+            string[] filterFiles = Array.FindAll<string>(files, str => SwHelperFunction.IsSolidworksFile(str));
+            foreach (string file in filterFiles)
             {
                 if (string.IsNullOrEmpty(file) && !File.Exists(file)) continue;
-
-                //ignore no solidworks files
-                string ext = Path.GetExtension(file).ToLower();
-                if (!(ext == ".sldptr" || ext == ".sldasm" || ext == ".slddrw")) continue;
 
                 if (_targetFiles == null)
                     _targetFiles = new List<SwFileItem>();
