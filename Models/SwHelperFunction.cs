@@ -21,6 +21,7 @@ namespace SwPrpUtil.Models
 		/// </remarks>
 		/// <param name="path">Path to solidwork file</param>
 		/// <returns>Type of file as enum <see cref="swDocumentTypes_e"/></returns>
+		/// <exception cref="ArgumentException">
 		/// <exception cref="NotSupportedException">
 		/// Throw if file not supported in this application.
 		/// </exception>
@@ -49,6 +50,18 @@ namespace SwPrpUtil.Models
 			}
 		}
 
+		/// <summary>
+		/// Check file extension. Also ignore temp file (file begin with '~').
+		/// </summary>
+		/// <param name="filePath"></param>
+		/// <returns>true if extension is ".sldprt", ".sldasm", ".slddrw", otherwise false</returns>
+		public static bool IsSolidworksFile(string filePath)
+        {
+			if(filePath == null) return false;
+			if (Path.GetFileName(filePath).First() == '~') return false;
+			string ext = Path.GetExtension(filePath).ToLower();
+			return (ext == ".sldprt" || ext == ".sldasm" || ext == ".slddrw");
+		}
 
 		#region Parse sw load file
 
