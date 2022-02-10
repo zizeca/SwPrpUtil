@@ -74,23 +74,33 @@
 						<ColumnDefinition Width="*" MinWidth="200" />
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
-						<RowDefinition Height="60" />
+						<RowDefinition Height="90" />
 						<RowDefinition Height="*" MinHeight="200" />
 					</Grid.RowDefinitions>
 
 					<Grid Grid.Column="0" Grid.Row="0">
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="100" />
+							<ColumnDefinition Width="80" />
 							<ColumnDefinition Width="*" />
 						</Grid.ColumnDefinitions>
 						<Grid.RowDefinitions>
 							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
 							<RowDefinition Height="*" />
 						</Grid.RowDefinitions>
 
-						<Button Content="Start" Command="{Binding Path=OpenImportDialog}">
-						</Button>
-					</Grid>
+                        <Button Content="Import" Margin="4" Command="{Binding Path=OpenImportDialog}" />
+                        <Button Grid.Row="1" Content="Run" Margin="4" />
+                        <Button Grid.Row="2" Content="Cancel" Margin="4" />
+
+                        <GroupBox Header="Settings" Grid.Column="1" Grid.RowSpan="3">
+                            <StackPanel>
+                                <CheckBox Margin="0,2">Write to main property</CheckBox>
+                                <CheckBox Margin="0,2">Write to configurations property</CheckBox>
+                                <CheckBox Margin="0,2">Rewrite if exist</CheckBox>
+                            </StackPanel>
+                        </GroupBox>
+                    </Grid>
 
 					<Grid Grid.Column="2" Grid.Row="0">
 						<Grid.ColumnDefinitions>
