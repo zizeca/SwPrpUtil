@@ -29,8 +29,8 @@
         <HierarchicalDataTemplate DataType="{x:Type model:SwFileItem}">
             <HierarchicalDataTemplate.ItemsSource>
                 <MultiBinding Converter="{StaticResource FolderConverter}" ConverterParameter=", Configurationproperties">
-                    <Binding Path="MainProperty" />
-                    <Binding Path="SwFileConfigurations" />
+                        <Binding Path="FileProperties.MainProperty" />
+                        <Binding Path="FileProperties.SwFileConfigurations" />
                 </MultiBinding>
             </HierarchicalDataTemplate.ItemsSource>
             <TextBlock Text="{Binding Path=FileName}" />
