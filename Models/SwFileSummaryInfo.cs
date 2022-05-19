@@ -4,6 +4,9 @@ using System;
 
 namespace SwPrpUtil.Models
 {
+	/// <summary>
+	/// Structure for collect summary information from Solidworks document
+	/// </summary>
 	internal class SwFileSummaryInfo
 	{
 		//ctor default
@@ -11,7 +14,10 @@ namespace SwPrpUtil.Models
 		{
 		}
 
-		//ctor2
+		/// <summary>
+		/// Creat Structure from open document
+		/// </summary>
+		/// <param name="doc"></param>
 		public SwFileSummaryInfo(ModelDoc2 doc)
 		{
 			ReadSummaryInfo(doc);
@@ -36,7 +42,6 @@ namespace SwPrpUtil.Models
 			SwSumInfoSavedBy = doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoSavedBy];
 			SwSumInfoSubject = doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoSubject];
 			SwSumInfoTitle = doc.SummaryInfo[(int)swSummInfoField_e.swSumInfoTitle];
-			//return true;
 		}
 
 		public string SwSumInfoAuthor { get; set; }

@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace SwPrpUtil.Models
 {
+    /// <summary>
+    /// Core class for editing solidworks documents
+    /// </summary>
     internal class SwPrpEditor : ObservableObject
     {
         #region prop

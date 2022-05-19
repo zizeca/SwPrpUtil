@@ -4,6 +4,9 @@ using System.IO;
 
 namespace SwPrpUtil.Models
 {
+    /// <summary>
+    /// Object for storing information about solidworks files
+    /// </summary>
     internal class SwFileItem
     {
         #region Path_properies

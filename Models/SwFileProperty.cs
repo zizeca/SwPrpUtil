@@ -9,16 +9,31 @@ using System.Threading.Tasks;
 
 namespace SwPrpUtil.Models
 {
+    /// <summary>
+    /// 
+    /// Object for storing custom properties from solidworks files
+    /// 
+    /// </summary>
     internal class SwFileProperty
     {
         public SwFileProperty()
         { }
 
+        /// <summary>
+        /// Create object from opened solidworks document
+        /// </summary>
+        /// <param name="doc"> solidowrks opened document </param>
         public SwFileProperty(ModelDoc2 doc)
         {
             this.ReadFilePropertyFromDoc(doc);
         }
 
+        /// <summary>
+        /// Get list of custom properties from configuration
+        /// </summary>
+        /// <param name="configName">Configuration name. If name is "" return Main properties</param>
+        /// <returns>List of SwProperty (custom properties strucure)</returns>
+        /// <exception cref="Exception"></exception>
         public List<SwProperty> GetProperties(string configName = "")
         {
             if (configName == "") return this.MainProperty.Properties;
@@ -31,6 +46,9 @@ namespace SwPrpUtil.Models
             throw new Exception(configName + " Not found");
         }
 
+        /// <summary>
+        /// Summary information about Solidworks document 
+        /// </summary>
         public SwFileSummaryInfo SummaryInfo { get; set; }
 
         // Main custom property
