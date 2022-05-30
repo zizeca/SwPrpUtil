@@ -40,6 +40,9 @@ namespace SwPrpUtil.Models
 
         #endregion Path_properies
 
+        /// <summary>
+        /// Collect Custom properties
+        /// </summary>
         public SwFileProperty FileProperties { get; set; }
 
         #region Ctors

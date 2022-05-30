@@ -54,12 +54,9 @@
 		<StackPanel>
 			<Button Content="Import" Command="{Binding Path=ImoprtPorperties}" />
 		</StackPanel>
-        <TreeView Grid.Column="1" ItemsSource="{Binding Path=FileItems}" x:Name="ConfigTree" >
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                </Style>
-            </TreeView.ItemContainerStyle>
+        <ContentControl x:Name="SelectedItemHelper" Content="{Binding SelectedObject, Mode=OneWayToSource}" Visibility="Collapsed"/>
+        <TreeView Grid.Column="1" ItemsSource="{Binding Path=FileItems}" x:Name="ConfigTree" SelectedItemChanged="TreeView_SelectedItemChanged">
+
         </TreeView>
 
         <DataGrid Grid.Column="2" ItemsSource="{Binding ElementName=ConfigTree, Path=SelectedItem.Properties, Mode=OneWay}" AutoGenerateColumns="False" IsReadOnly="True" >

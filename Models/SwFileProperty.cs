@@ -121,9 +121,11 @@ namespace SwPrpUtil.Models
             if (configNames == null || configNames.Count() == 0)
                 throw new Exception("Configuration get exception");
 
+            //Fill Main properties
             MainProperty = new SwCustomProperty("Main Properties", GetPropertiesFromSwDoc(doc));
             SummaryInfo = new SwFileSummaryInfo(doc);
 
+            //Fill configuration properties
             SwFileConfigurations = new List<SwCustomProperty>();
             foreach (string configName in configNames)
             {

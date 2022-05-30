@@ -51,9 +51,11 @@ namespace SwPrpUtil.ViewModels
 						break;
 				}
 			};
-			///*
-			//test code
-			SwFileItem item = new SwFileItem();
+
+            #region Test_code
+            ///*
+            // tempolary test code
+            SwFileItem item = new SwFileItem();
 			SwFileItem item2 = new SwFileItem();
 
 			item.FilePath = @"D:\1.Сurrent_work\vinnik\0712-01-01-001.sldprt";
@@ -79,9 +81,15 @@ namespace SwPrpUtil.ViewModels
 			SwCustomProperty cnf3 = new SwCustomProperty("Config 3", new List<SwProperty>() { prp, prp1, prp });
 
 			item.FileProperties.SwFileConfigurations = new List<SwCustomProperty>() { cnf1, cnf2, cnf3 };
+			item.FileProperties.MainProperty = property;
 			item2.FileProperties.SwFileConfigurations = new List<SwCustomProperty>() { cnf1, cnf2, cnf3 };
+			item2.FileProperties.MainProperty = property;
+
 			_fileItems = new List<SwFileItem>() { item, item2 };
 			//*/
+
+			#endregion Test_code
+
 		}
 
 		public ICommand ImoprtPorperties { get; set; }
@@ -95,5 +103,18 @@ namespace SwPrpUtil.ViewModels
 			_ = await _editor.ImportFileProperties(path);
 			FileItems = _editor.SourceFiles;
 		}
+
+		public object SelectedObject  // Class is not actually "object"
+		{
+			get { return _selected_object; }
+			set
+			{
+				Set(ref _selected_object, value);
+				Console.WriteLine(SelectedObject);
+			}
+		}
+		object _selected_object;
+
+
 	}
 }

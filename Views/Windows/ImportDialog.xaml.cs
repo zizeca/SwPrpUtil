@@ -23,5 +23,11 @@ namespace SwPrpUtil.Views.Windows
 		{
 			InitializeComponent();
 		}
+
+		//crutch programming
+		private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+		{
+			SelectedItemHelper.Content = e.NewValue;
+		}
 	}
 }
