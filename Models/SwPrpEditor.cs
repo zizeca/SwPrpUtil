@@ -94,7 +94,7 @@ namespace SwPrpUtil.Models
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         /// <exception cref="FileLoadException"></exception>
-        public async Task<bool> ImportFileProperties(string pathToFile)
+        public async Task<bool> ReadFileProperties(string pathToFile)
         {
             if (string.IsNullOrEmpty(pathToFile) || !File.Exists(pathToFile))
                 throw new ArgumentException(nameof(pathToFile));

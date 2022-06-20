@@ -52,8 +52,9 @@
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
 		<StackPanel>
-			<Button Content="Import" Command="{Binding Path=ImoprtPorperties}" />
-		</StackPanel>
+            <Button Content="Open" Command="{Binding Path=OpenFiles}" />
+            <Button Content="Import" Command="{Binding Path=ImportPorperties}" />
+        </StackPanel>
         <ContentControl x:Name="SelectedItemHelper" Content="{Binding SelectedObject, Mode=OneWayToSource}" Visibility="Collapsed"/>
         <TreeView Grid.Column="1" ItemsSource="{Binding Path=FileItems}" x:Name="ConfigTree" SelectedItemChanged="TreeView_SelectedItemChanged">
 

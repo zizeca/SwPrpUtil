@@ -29,15 +29,13 @@ namespace SwPrpUtil.ViewModels
 
 		public List<SwFileItem> FileItems { get => _fileItems; set => Set(ref _fileItems, value); }
 
+        private readonly SwPrpEditor _editor;
 
-        public SwProperty SelectedProperty { get; set; }
-
-        private SwPrpEditor _editor;
-
+		//ctor
 		public ImportDialogViewModel()
 		{
 			_editor = new SwPrpEditor();
-			ImoprtPorperties = new AsyncRelayCommand(OnImoprtPorpertiesExecuted);
+			OpenFiles = new AsyncRelayCommand(OnOpenFilesExecuted);
 			_editor.PropertyChanged += (s, e) =>
 			{
 				switch (e.PropertyName)
@@ -92,19 +90,20 @@ namespace SwPrpUtil.ViewModels
 
 		}
 
-		public ICommand ImoprtPorperties { get; set; }
+		public ICommand OpenFiles { get; set; }
 
-		public async Task OnImoprtPorpertiesExecuted()
+		public async Task OnOpenFilesExecuted()
 		{
 			OpenFileDialog dialog = new OpenFileDialog();
 			dialog.ShowDialog();
 			string path = dialog.FileName;
 
-			_ = await _editor.ImportFileProperties(path);
+			_ = await _editor.ReadFileProperties(path);
 			FileItems = _editor.SourceFiles;
 		}
 
-		public object SelectedObject  // Class is not actually "object"
+		//tree view seletcted item, try cast to SwProperty
+		public object SelectedObject
 		{
 			get { return _selected_object; }
 			set
@@ -114,6 +113,33 @@ namespace SwPrpUtil.ViewModels
 			}
 		}
 		object _selected_object;
+
+        private RelayCommand importPorperties;
+
+        public ICommand ImportPorperties
+        {
+            get
+            {
+                if (importPorperties == null)
+                {
+                    importPorperties = new RelayCommand(OnImportPorpertiesExecute, CanImportProperiesExecute);
+                }
+
+                return importPorperties;
+            }
+        }
+
+        private void OnImportPorpertiesExecute(object commandParameter)
+        {
+			
+        }
+
+		private bool CanImportProperiesExecute(object commandParameter)
+        {
+			if(_selected_object is SwCustomProperty)
+				return true;
+			return false;
+        }
 
 
 	}
